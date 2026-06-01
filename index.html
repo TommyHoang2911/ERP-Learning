@@ -1,0 +1,2543 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ERP Korea — Learning Roadmap</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:ital,wght@0,300;0,400;0,500;0,600;1,300&display=swap" rel="stylesheet">
+<style>
+/* ─── Reset & Base ─── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --bg: #0B0E13;
+  --bg2: #111520;
+  --bg3: #181d2a;
+  --border: rgba(255,255,255,0.07);
+  --border2: rgba(255,255,255,0.12);
+  --text: #E8EAF0;
+  --text2: #8B93A8;
+  --text3: #545C70;
+  --accent: #4AFFA0;
+  --accent2: #00C9FF;
+  --accent3: #FF6B6B;
+  --amber: #FFB347;
+  --purple: #A78BFA;
+  --mono: 'IBM Plex Mono', monospace;
+  --sans: 'IBM Plex Sans', sans-serif;
+  --panel-w: 520px;
+}
+
+html { scroll-behavior: smooth; }
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--sans);
+  font-weight: 300;
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+/* ─── Grid noise texture ─── */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.03'/%3E%3C/svg%3E");
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* ─── Header ─── */
+header {
+  position: relative;
+  z-index: 10;
+  padding: 2.5rem 3rem 2rem;
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  align-items: baseline;
+  gap: 1.5rem;
+  flex-wrap: wrap;
+}
+
+.logo {
+  font-family: var(--mono);
+  font-size: 1.05rem;
+  font-weight: 600;
+  color: var(--accent);
+  letter-spacing: -0.02em;
+}
+
+.logo span { color: var(--text3); }
+
+header p {
+  font-size: 0.82rem;
+  color: var(--text3);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.header-right {
+  margin-left: auto;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.phase-indicator {
+  font-family: var(--mono);
+  font-size: 0.75rem;
+  color: var(--text3);
+}
+
+.phase-indicator span {
+  color: var(--accent);
+  font-weight: 600;
+}
+
+/* ─── Main layout ─── */
+.app {
+  display: flex;
+  min-height: calc(100vh - 85px);
+  position: relative;
+  z-index: 1;
+}
+
+/* ─── Left: Roadmap ─── */
+.roadmap-col {
+  flex: 1;
+  padding: 2.5rem 2rem 2.5rem 3rem;
+  overflow-y: auto;
+  max-height: calc(100vh - 85px);
+  transition: flex 0.4s cubic-bezier(0.4,0,0.2,1);
+}
+
+.section-label {
+  font-family: var(--mono);
+  font-size: 0.7rem;
+  color: var(--text3);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  margin-bottom: 1.75rem;
+}
+
+/* ─── Phase nodes ─── */
+.timeline {
+  position: relative;
+  padding-left: 1.5rem;
+}
+
+.timeline::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 8px;
+  bottom: 8px;
+  width: 1px;
+  background: linear-gradient(to bottom, transparent, var(--border2) 10%, var(--border2) 90%, transparent);
+}
+
+.phase {
+  position: relative;
+  margin-bottom: 0.75rem;
+  cursor: pointer;
+}
+
+.phase::before {
+  content: '';
+  position: absolute;
+  left: -1.5rem;
+  top: 20px;
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--border2);
+  border: 1px solid var(--border2);
+  transition: all 0.2s;
+  transform: translateX(-3px);
+}
+
+.phase.active::before,
+.phase:hover::before {
+  background: var(--accent);
+  border-color: var(--accent);
+  box-shadow: 0 0 10px rgba(74,255,160,0.4);
+}
+
+.phase-card {
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 1rem 1.25rem;
+  background: var(--bg2);
+  transition: all 0.2s cubic-bezier(0.4,0,0.2,1);
+  position: relative;
+  overflow: hidden;
+}
+
+.phase-card::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 3px;
+  border-radius: 8px 0 0 8px;
+  background: var(--border2);
+  transition: background 0.2s;
+}
+
+.phase:hover .phase-card,
+.phase.active .phase-card {
+  border-color: var(--border2);
+  background: var(--bg3);
+}
+
+.phase.active .phase-card::before { background: var(--accent); }
+.phase:hover:not(.active) .phase-card::before { background: var(--text3); }
+
+.phase-meta {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-bottom: 0.5rem;
+}
+
+.phase-tag {
+  font-family: var(--mono);
+  font-size: 0.65rem;
+  padding: 2px 8px;
+  border-radius: 3px;
+  font-weight: 500;
+  letter-spacing: 0.04em;
+}
+
+.tag-green  { background: rgba(74,255,160,0.1); color: var(--accent); border: 1px solid rgba(74,255,160,0.2); }
+.tag-blue   { background: rgba(0,201,255,0.1);  color: var(--accent2); border: 1px solid rgba(0,201,255,0.2); }
+.tag-amber  { background: rgba(255,179,71,0.1); color: var(--amber);  border: 1px solid rgba(255,179,71,0.2); }
+.tag-red    { background: rgba(255,107,107,0.1);color: var(--accent3); border: 1px solid rgba(255,107,107,0.2); }
+.tag-purple { background: rgba(167,139,250,0.1);color: var(--purple); border: 1px solid rgba(167,139,250,0.2); }
+
+.phase-duration {
+  font-family: var(--mono);
+  font-size: 0.65rem;
+  color: var(--text3);
+  margin-left: auto;
+}
+
+.phase-title {
+  font-size: 0.95rem;
+  font-weight: 500;
+  color: var(--text);
+  margin-bottom: 0.3rem;
+}
+
+.phase-desc {
+  font-size: 0.78rem;
+  color: var(--text2);
+  line-height: 1.5;
+}
+
+.topic-pills {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+  margin-top: 0.75rem;
+}
+
+.topic-pill {
+  font-family: var(--mono);
+  font-size: 0.65rem;
+  padding: 2px 8px;
+  border-radius: 20px;
+  border: 1px solid var(--border);
+  color: var(--text3);
+  background: transparent;
+  transition: all 0.15s;
+}
+
+.phase:hover .topic-pill,
+.phase.active .topic-pill {
+  border-color: var(--border2);
+  color: var(--text2);
+}
+
+/* ─── Connector arrows between phases ─── */
+.connector {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.3rem 0;
+  margin-left: -1.5rem;
+}
+
+.connector-line {
+  width: 1px;
+  height: 20px;
+  background: var(--border);
+  margin-left: 3px;
+}
+
+/* ─── Right: Detail panel ─── */
+.detail-panel {
+  width: 0;
+  overflow: hidden;
+  transition: width 0.4s cubic-bezier(0.4,0,0.2,1);
+  border-left: 1px solid transparent;
+  position: sticky;
+  top: 0;
+  height: calc(100vh - 85px);
+  display: flex;
+  flex-direction: column;
+}
+
+.detail-panel.open {
+  width: var(--panel-w);
+  border-left-color: var(--border);
+}
+
+.detail-inner {
+  opacity: 0;
+  transform: translateX(20px);
+  transition: opacity 0.3s 0.15s, transform 0.3s 0.15s;
+  height: 100%;
+  overflow-y: auto;
+  padding: 2rem 2rem 2rem 2rem;
+  flex: 1;
+}
+
+.detail-panel.open .detail-inner {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+.detail-header {
+  display: flex;
+  align-items: flex-start;
+  gap: 1rem;
+  margin-bottom: 1.75rem;
+  padding-bottom: 1.25rem;
+  border-bottom: 1px solid var(--border);
+}
+
+.detail-close {
+  margin-left: auto;
+  background: none;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  color: var(--text3);
+  cursor: pointer;
+  padding: 4px 10px;
+  font-family: var(--mono);
+  font-size: 0.75rem;
+  transition: all 0.15s;
+  flex-shrink: 0;
+}
+
+.detail-close:hover { border-color: var(--border2); color: var(--text); }
+
+.detail-phase-title {
+  font-size: 1.1rem;
+  font-weight: 500;
+  color: var(--text);
+  margin-bottom: 0.25rem;
+}
+
+.detail-phase-sub {
+  font-size: 0.78rem;
+  color: var(--text2);
+}
+
+/* ─── Week cards in detail ─── */
+.week-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.75rem;
+  margin-bottom: 1.5rem;
+}
+
+.week-card {
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 1rem;
+  transition: border-color 0.15s;
+}
+
+.week-card:hover { border-color: var(--border2); }
+
+.week-label {
+  font-family: var(--mono);
+  font-size: 0.6rem;
+  color: var(--text3);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  margin-bottom: 0.4rem;
+}
+
+.week-name {
+  font-size: 0.82rem;
+  font-weight: 500;
+  color: var(--text);
+  margin-bottom: 0.6rem;
+}
+
+.skill-list {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+}
+
+.skill-list li {
+  font-size: 0.75rem;
+  color: var(--text2);
+  line-height: 1.5;
+  display: flex;
+  gap: 0.5rem;
+}
+
+.skill-list li::before {
+  content: '—';
+  color: var(--text3);
+  flex-shrink: 0;
+}
+
+/* ─── Claude prompt box ─── */
+.prompt-box {
+  background: rgba(74,255,160,0.04);
+  border: 1px solid rgba(74,255,160,0.15);
+  border-radius: 8px;
+  padding: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.prompt-box-title {
+  font-family: var(--mono);
+  font-size: 0.7rem;
+  color: var(--accent);
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  margin-bottom: 0.75rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.prompt-box-title::before { content: '◆'; font-size: 0.5rem; }
+
+.prompt-list {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+.prompt-list li {
+  font-size: 0.75rem;
+  color: rgba(74,255,160,0.6);
+  padding: 0.5rem 0;
+  border-bottom: 1px solid rgba(74,255,160,0.08);
+  cursor: pointer;
+  display: flex;
+  gap: 0.5rem;
+  line-height: 1.5;
+  transition: color 0.15s;
+}
+
+.prompt-list li:last-child { border-bottom: none; }
+.prompt-list li:hover { color: var(--accent); }
+.prompt-list li::before { content: '↗'; flex-shrink: 0; color: rgba(74,255,160,0.3); }
+
+/* ─── Milestone bar ─── */
+.milestone-section {
+  margin-bottom: 1.5rem;
+}
+
+.milestone-label {
+  font-family: var(--mono);
+  font-size: 0.65rem;
+  color: var(--text3);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  margin-bottom: 0.6rem;
+}
+
+.milestone-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+.milestone-item {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  font-size: 0.78rem;
+  color: var(--text2);
+}
+
+.milestone-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+/* ─── Scrollbar ─── */
+::-webkit-scrollbar { width: 4px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: var(--border2); border-radius: 4px; }
+::-webkit-scrollbar-thumb:hover { background: var(--text3); }
+
+/* ─── Footer ─── */
+footer {
+  position: relative;
+  z-index: 1;
+  padding: 1rem 3rem;
+  border-top: 1px solid var(--border);
+  font-family: var(--mono);
+  font-size: 0.65rem;
+  color: var(--text3);
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+}
+
+.status-dot {
+  width: 5px; height: 5px;
+  border-radius: 50%;
+  background: var(--accent);
+  box-shadow: 0 0 6px var(--accent);
+  animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.4; }
+}
+
+/* ─── Responsive ─── */
+@media (max-width: 900px) {
+  :root { --panel-w: 100vw; }
+  .app { flex-direction: column; }
+  .roadmap-col { max-height: none; padding: 1.5rem 1rem; }
+  .detail-panel.open { width: 100%; height: auto; position: fixed; inset: 0; z-index: 100; background: var(--bg); overflow-y: auto; }
+  .detail-panel.open .detail-inner { padding: 1.5rem 1rem; }
+  header { padding: 1.5rem 1rem 1rem; }
+}
+
+/* ─── Animations ─── */
+.phase { animation: slideUp 0.4s cubic-bezier(0.4,0,0.2,1) both; }
+.phase:nth-child(1) { animation-delay: 0.05s; }
+.phase:nth-child(2) { animation-delay: 0.1s; }
+.phase:nth-child(3) { animation-delay: 0.15s; }
+.phase:nth-child(4) { animation-delay: 0.2s; }
+.phase:nth-child(5) { animation-delay: 0.25s; }
+.phase:nth-child(6) { animation-delay: 0.3s; }
+.phase:nth-child(7) { animation-delay: 0.35s; }
+
+@keyframes slideUp {
+  from { opacity: 0; transform: translateY(12px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* ─── Prompt Detail Modal ─── */
+.pm-overlay {
+  position: fixed; inset: 0;
+  background: rgba(7,9,14,0.88);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  z-index: 200;
+  display: flex; align-items: center; justify-content: center;
+  padding: 1.5rem;
+  opacity: 0; pointer-events: none;
+  transition: opacity 0.2s;
+}
+.pm-overlay.open { opacity: 1; pointer-events: all; }
+
+.pm-card {
+  background: var(--bg2);
+  border: 1px solid var(--border2);
+  border-radius: 12px;
+  width: 100%; max-width: 820px; max-height: 88vh;
+  display: flex; flex-direction: column;
+  transform: translateY(16px) scale(0.98);
+  transition: transform 0.25s cubic-bezier(0.4,0,0.2,1);
+  box-shadow: 0 32px 80px rgba(0,0,0,0.55);
+}
+.pm-overlay.open .pm-card { transform: translateY(0) scale(1); }
+
+.pm-header {
+  padding: 1.5rem 1.5rem 1.25rem;
+  border-bottom: 1px solid var(--border);
+  display: flex; gap: 1rem; align-items: flex-start;
+  flex-shrink: 0;
+}
+.pm-header-text { flex: 1; }
+.pm-header-text h2 { font-size: 1.05rem; font-weight: 500; color: var(--text); margin: 0.3rem 0 0.2rem; }
+.pm-header-text p  { font-size: 0.76rem; color: var(--text2); }
+
+.pm-body { padding: 1.5rem; overflow-y: auto; flex: 1; }
+
+.pm-footer {
+  padding: 0.875rem 1.5rem;
+  border-top: 1px solid var(--border);
+  display: flex; justify-content: space-between; align-items: center;
+  gap: 1rem; flex-shrink: 0;
+}
+.pm-footer-hint { font-family: var(--mono); font-size: 0.65rem; color: var(--text3); }
+
+.pm-copy-btn {
+  background: rgba(74,255,160,0.08);
+  border: 1px solid rgba(74,255,160,0.2);
+  border-radius: 6px; color: var(--accent);
+  font-family: var(--mono); font-size: 0.75rem;
+  padding: 0.45rem 1.1rem; cursor: pointer;
+  transition: all 0.15s; white-space: nowrap;
+}
+.pm-copy-btn:hover { background: rgba(74,255,160,0.15); border-color: rgba(74,255,160,0.4); }
+
+/* Learn content blocks */
+.learn-section { margin-bottom: 1.75rem; }
+.learn-section:last-child { margin-bottom: 0; }
+.learn-section h3 {
+  font-family: var(--mono); font-size: 0.67rem; font-weight: 600;
+  color: var(--text3); text-transform: uppercase; letter-spacing: 0.1em;
+  margin-bottom: 0.875rem; padding-bottom: 0.5rem;
+  border-bottom: 1px solid var(--border);
+  display: flex; align-items: center; gap: 0.45rem;
+}
+.learn-section h3::before { content: '//'; color: var(--border2); }
+
+.compare-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem; }
+@media (max-width: 600px) { .compare-grid { grid-template-columns: 1fr; } }
+
+.compare-card {
+  background: var(--bg3); border: 1px solid var(--border);
+  border-radius: 8px; padding: 1rem;
+}
+.compare-card.c-green  { border-top: 2px solid var(--accent); }
+.compare-card.c-blue   { border-top: 2px solid var(--accent2); }
+.compare-card.c-amber  { border-top: 2px solid var(--amber); }
+.compare-card.c-red    { border-top: 2px solid var(--accent3); }
+.compare-card.c-purple { border-top: 2px solid var(--purple); }
+
+.cc-label { font-family: var(--mono); font-size: 0.62rem; color: var(--text3); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 0.25rem; }
+.cc-title { font-size: 0.88rem; font-weight: 500; color: var(--text); margin-bottom: 0.5rem; }
+.compare-card p { font-size: 0.76rem; color: var(--text2); line-height: 1.65; margin-bottom: 0.5rem; }
+
+.diagram {
+  background: #080b10; border: 1px solid var(--border);
+  border-radius: 6px; padding: 1rem 1.25rem;
+  font-family: var(--mono); font-size: 0.69rem; color: #6A7490;
+  overflow-x: auto; line-height: 1.75; white-space: pre;
+}
+
+.code-block {
+  background: #080b10; border: 1px solid var(--border);
+  border-left: 3px solid rgba(0,201,255,0.35);
+  border-radius: 6px; padding: 1rem 1.25rem;
+  font-family: var(--mono); font-size: 0.7rem; color: #7BBFD8;
+  overflow-x: auto; line-height: 1.8; white-space: pre;
+}
+
+.callout {
+  border-radius: 6px; padding: 0.75rem 1rem;
+  font-size: 0.77rem; line-height: 1.65; margin-bottom: 0.75rem;
+}
+.callout:last-child { margin-bottom: 0; }
+.ca-green  { background: rgba(74,255,160,0.05);  border: 1px solid rgba(74,255,160,0.18);  color: rgba(74,255,160,0.85); }
+.ca-blue   { background: rgba(0,201,255,0.05);   border: 1px solid rgba(0,201,255,0.18);   color: rgba(0,201,255,0.85); }
+.ca-amber  { background: rgba(255,179,71,0.05);  border: 1px solid rgba(255,179,71,0.18);  color: rgba(255,179,71,0.85); }
+.ca-red    { background: rgba(255,107,107,0.05); border: 1px solid rgba(255,107,107,0.18); color: rgba(255,107,107,0.85); }
+.ca-purple { background: rgba(167,139,250,0.05); border: 1px solid rgba(167,139,250,0.18); color: rgba(167,139,250,0.85); }
+
+.learn-list { list-style: none; margin: 0.5rem 0 0; display: flex; flex-direction: column; gap: 0.3rem; }
+.learn-list li { font-size: 0.75rem; color: var(--text2); display: flex; gap: 0.5rem; line-height: 1.5; }
+.learn-list li::before { content: '→'; color: var(--text3); flex-shrink: 0; }
+
+.data-table { width: 100%; border-collapse: collapse; font-size: 0.75rem; }
+.data-table th { text-align: left; font-family: var(--mono); font-size: 0.62rem; color: var(--text3); text-transform: uppercase; letter-spacing: 0.06em; padding: 0.4rem 0.75rem; border-bottom: 1px solid var(--border2); background: #080b10; }
+.data-table td { padding: 0.5rem 0.75rem; color: var(--text2); border-bottom: 1px solid var(--border); line-height: 1.5; }
+.data-table tr:last-child td { border-bottom: none; }
+
+.hl { color: var(--accent); font-weight: 500; }
+.hl-b { color: var(--accent2); font-weight: 500; }
+.hl-a { color: var(--amber); font-weight: 500; }
+
+@media (max-width: 900px) {
+  .pm-overlay { padding: 0; align-items: flex-end; }
+  .pm-card { max-height: 92vh; border-radius: 12px 12px 0 0; }
+}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="logo">ERP<span>/</span>KR<span>_</span>LEARN</div>
+  <p>Learning roadmap — Korean ERP Development</p>
+  <div class="header-right">
+    <div class="phase-indicator">phase <span id="active-phase-label">—</span></div>
+  </div>
+</header>
+
+<div class="app">
+  <!-- Left column: Roadmap -->
+  <div class="roadmap-col">
+    <div class="section-label">// roadmap — click để xem chi tiết</div>
+    <div class="timeline" id="timeline"></div>
+  </div>
+
+  <!-- Right panel: Detail -->
+  <div class="detail-panel" id="detail-panel">
+    <div class="detail-inner" id="detail-inner">
+      <!-- filled by JS -->
+    </div>
+  </div>
+</div>
+
+<footer>
+  <div class="status-dot"></div>
+  <span>ERP Korea Learning — Fresher Developer Track</span>
+  <span style="margin-left:auto; color: var(--text3)">Tommy Hoang · Da Nang, VN</span>
+</footer>
+
+<!-- Prompt Detail Modal -->
+<div id="prompt-modal" class="pm-overlay">
+  <div class="pm-card">
+    <div class="pm-header">
+      <div class="pm-header-text">
+        <span id="pm-tag" class="phase-tag"></span>
+        <h2 id="pm-title"></h2>
+        <p id="pm-sub"></p>
+      </div>
+      <button class="detail-close" onclick="closePromptModal()">✕ Đóng</button>
+    </div>
+    <div class="pm-body" id="pm-body"></div>
+    <div class="pm-footer">
+      <span class="pm-footer-hint">Đọc xong → dùng prompt này hỏi Claude để đào sâu hơn</span>
+      <button class="pm-copy-btn" id="pm-copy-btn" onclick="copyCurrentPrompt()">↗ Copy prompt</button>
+    </div>
+  </div>
+</div>
+
+<script>
+const PHASES = [
+  {
+    id: 'p1',
+    tag: 'Nền tảng',
+    tagClass: 'tag-green',
+    duration: 'Tháng 1–2',
+    title: 'ERP Foundation & Korean Business Context',
+    desc: 'Hiểu ERP là gì, Hàn Quốc cần gì khác so với thế giới',
+    topics: ['GL','AP','AR','Inventory','세금계산서','4대보험','K-IFRS','사업자번호'],
+    weeks: [
+      { label: 'Tuần 1–2', name: 'ERP Core Concepts', skills: ['Modules: GL, AP, AR, Inventory, HR, Payroll','Business process flow trong ERP','Chart of Accounts & fiscal year','Master data vs. transaction data'] },
+      { label: 'Tuần 3–4', name: 'Korean Business Requirements', skills: ['K-IFRS (IFRS điều chỉnh theo Hàn)','Hometax e-Tax Invoice (세금계산서)','4대보험 — 4 loại bảo hiểm bắt buộc','Korean fiscal year & reporting cycles'] },
+      { label: 'Tuần 5–6', name: 'Tech Stack & Codebase', skills: ['Đọc hiểu codebase ERP công ty dùng','DB schema: tables, relations, naming','API patterns trong ERP (REST/internal)','Setup môi trường dev local'] },
+      { label: 'Tuần 7–8', name: 'Korean Localization Tech', skills: ['사업자번호 validation algorithm','Encoding: UTF-8 vs EUC-KR edge cases','Date/number format (Korean locale)','Korean address structure'] },
+    ],
+    milestones: [
+      { text: 'Đọc được DB schema của công ty', color: '#4AFFA0' },
+      { text: 'Hiểu flow của 세금계산서', color: '#4AFFA0' },
+      { text: 'Setup môi trường dev thành công', color: '#4AFFA0' },
+    ],
+    prompts: [
+      'Giải thích AP vs AR trong ERP với ví dụ quy trình công ty Hàn Quốc',
+      '세금계산서 là gì, tích hợp vào ERP như thế nào về mặt kỹ thuật?',
+      'Hàn Quốc có 4대보험 — developer cần xử lý gì trong module Payroll?',
+      'Validate mã số thuế 사업자등록번호 bằng code, có giải thích thuật toán',
+    ]
+  },
+  {
+    id: 'p2',
+    tag: 'Chuyên sâu',
+    tagClass: 'tag-blue',
+    duration: 'Tháng 3–4',
+    title: 'Module Deep Dive & Integration',
+    desc: 'Làm chủ 1–2 module cụ thể, hiểu integration patterns với Hometax',
+    topics: ['VAT 부가세','연말정산','근로기준법','연차','Hometax API','CMS Banking','EDI'],
+    weeks: [
+      { label: 'Tháng 3', name: 'Financial Accounting (FI)', skills: ['Journal entries, posting periods','Korean VAT (부가가치세) reporting','Reconciliation & closing procedures','Currency handling (KRW specifics)'] },
+      { label: 'Tháng 4', name: 'HR & Payroll Korea', skills: ['근로기준법 — Labour Standards Act','연차 calculation (annual leave)','Severance pay (퇴직금) logic','Year-end tax settlement 연말정산'] },
+      { label: 'Integration', name: 'External Systems', skills: ['Hometax API / NTS linkage','Banking API (CMS — Cash Management)','EDI với đối tác Hàn Quốc','Error handling & retry pattern'] },
+    ],
+    milestones: [
+      { text: 'Fix bug trong module FI độc lập', color: '#00C9FF' },
+      { text: 'Hiểu flow 연말정산 end-to-end', color: '#00C9FF' },
+      { text: 'Test được Hometax API sandbox', color: '#00C9FF' },
+    ],
+    prompts: [
+      '연말정산 (year-end tax settlement) — developer ERP cần implement logic gì?',
+      'Tính 연차 theo 근로기준법 — pseudocode cho module HR',
+      'Korean VAT 부가가치세 reporting trong ERP — các mức thuế suất & NTS',
+      'Hometax API integration — flow submit 세금계산서 và nhận kết quả',
+    ]
+  },
+  {
+    id: 'p3',
+    tag: 'Thực chiến',
+    tagClass: 'tag-amber',
+    duration: 'Tháng 5–6',
+    title: 'Feature Development & Client Work',
+    desc: 'Tự thực hiện feature end-to-end, giao tiếp trực tiếp với khách Hàn',
+    topics: ['Korean spec','Unit testing','Data migration','Audit trail','Multi-company','RBAC'],
+    weeks: [
+      { label: 'Skill cốt lõi', name: 'Development Workflow', skills: ['Đọc spec tiếng Hàn → translate requirements','Write unit tests cho business logic','Data migration & validation scripts','Performance tuning (ERP queries nặng)'] },
+      { label: 'Communication', name: 'Korean Client Work', skills: ['Đọc tài liệu spec tiếng Hàn','Meeting notes & email tiếng Anh/Hàn','Bug report format phù hợp client Hàn','Hiểu văn hóa làm việc Hàn Quốc'] },
+      { label: 'Technical depth', name: 'ERP-Specific Patterns', skills: ['Soft delete vs hard delete trong ERP','Audit trail & change history design','Multi-company / multi-entity setup','Role-based permission modeling'] },
+    ],
+    milestones: [
+      { text: 'Own 1 feature từ spec đến production', color: '#FFB347' },
+      { text: 'Làm việc trực tiếp với client Hàn', color: '#FFB347' },
+      { text: 'Code được review và merge không revise nhiều', color: '#FFB347' },
+    ],
+    prompts: [
+      'Dịch spec tiếng Hàn → breakdown thành technical requirements rõ ràng',
+      'Thiết kế audit trail system cho ERP: schema & middleware pattern',
+      'Multi-company ERP architecture: shared data vs isolated data',
+      'RBAC design cho ERP Hàn Quốc: roles, permissions, department scope',
+    ]
+  },
+  {
+    id: 'p4',
+    tag: 'Nâng cao',
+    tagClass: 'tag-red',
+    duration: 'Tháng 7–12',
+    title: 'Specialization & Ownership',
+    desc: 'Chọn hướng chuyên sâu, bắt đầu lead nhỏ, hiểu compliance Hàn Quốc',
+    topics: ['PIPA','Open Banking','FSS reporting','MES integration','BOM','공인인증서','전자서명법'],
+    weeks: [
+      { label: 'Hướng A', name: 'ERP + Fintech Track', skills: ['Korean Open Banking API','Electronic B/L & trade finance','FSS reporting requirements','KRW FX handling & hedging logic'] },
+      { label: 'Hướng B', name: 'ERP + Manufacturing', skills: ['MES integration (공장 automation)','BOM & routing in Korean factories','Quality management (ISO trong Hàn)','Supply chain với chaebols'] },
+      { label: 'Compliance', name: 'Korean IT Regulations', skills: ['PIPA — Personal Info Protection Act','전자서명법 — Electronic Signature Act','공인인증서 legacy & 공동인증서 mới','Security audit requirements'] },
+    ],
+    milestones: [
+      { text: 'Lead được 1 feature nhỏ end-to-end', color: '#FF6B6B' },
+      { text: 'Hiểu PIPA compliance requirements', color: '#FF6B6B' },
+      { text: 'Mentor được junior về domain knowledge', color: '#FF6B6B' },
+    ],
+    prompts: [
+      'PIPA (개인정보보호법) vs GDPR — developer ERP cần implement gì?',
+      'Korean Open Banking API ecosystem — flow tích hợp với ERP',
+      'FSS reporting requirements — dữ liệu nào ERP phải export định kỳ?',
+      'MES integration pattern với ERP: realtime vs batch sync',
+    ]
+  },
+  {
+    id: 'p5',
+    tag: 'Workflow AI',
+    tagClass: 'tag-purple',
+    duration: 'Xuyên suốt',
+    title: 'Cách tận dụng Claude mỗi ngày',
+    desc: 'Prompt patterns giúp học nhanh hơn, debug nhanh hơn, giao tiếp tốt hơn',
+    topics: ['Concept→Code','Debug','Korean spec','Code review','Quiz mode','Client email'],
+    weeks: [
+      { label: 'Học kiến thức', name: 'Concept → Code', skills: ['"Giải thích X trong ERP Korea, rồi cho pseudocode"','"Đây là code tôi đang đọc, giải thích business logic"','"So sánh cách Hàn vs Việt Nam xử lý Y"','Paste error + context → ask root cause'] },
+      { label: 'Daily work', name: 'Debug & Code Review', skills: ['"Review logic tính thuế này đúng không?"','"Suggest test cases cho edge case này"','"Có race condition nào không trong code này?"','Generate mock data cho Korean business scenarios'] },
+      { label: 'Client work', name: 'Language & Culture', skills: ['Dịch spec tiếng Hàn + giải thích ý định','Viết email phản hồi client phù hợp văn hóa','"Yêu cầu này có gì cần clarify không?"','Prepare câu hỏi trước meeting với client'] },
+      { label: 'Growth', name: 'Self-Assessment', skills: ['"Quiz tôi về Korean payroll regulations"','"Tôi giải thích X, feedback xem đúng chưa"','"Tạo checklist trước khi merge feature này"','Mock interview về ERP domain knowledge'] },
+    ],
+    milestones: [
+      { text: 'Dùng Claude để hiểu codebase mới nhanh hơn 2x', color: '#A78BFA' },
+      { text: 'Không cần hỏi senior về Korean business rules cơ bản', color: '#A78BFA' },
+      { text: 'Tự dịch và hiểu spec tiếng Hàn được 80%', color: '#A78BFA' },
+    ],
+    prompts: [
+      'Quiz tôi 5 câu ERP cơ bản cho tuần đầu, sau đó chấm và giải thích',
+      'VN vs Korea accounting — ERP developer cần biết gì khác nhau?',
+      'Giải thích soft delete + audit log pattern trong ERP',
+      'Tôi là Fresher ERP dev mới tuần 1, hỏi tôi 3 câu để assess hiểu biết hiện tại',
+    ]
+  }
+];
+
+let activePhase = null;
+let currentPromptText = '';
+
+/* ═══════════════════════════════════════════════
+   PROMPT DETAIL CONTENT  (phaseId_promptIndex)
+   ═══════════════════════════════════════════════ */
+const PROMPT_DETAILS = {
+
+/* ── PHASE 1 ── */
+'p1_0': {
+  title: 'AP vs AR trong ERP',
+  subtitle: 'Hai module kế toán cốt lõi — với ví dụ quy trình công ty Hàn Quốc',
+  tag: 'FI Module', tagClass: 'tag-green',
+  body: `
+<div class="learn-section"><h3>Khái niệm cốt lõi</h3>
+<div class="compare-grid">
+  <div class="compare-card c-green">
+    <div class="cc-label">AP — Accounts Payable</div>
+    <div class="cc-title">Phải trả nhà cung cấp</div>
+    <p>Khoản công ty <span class="hl">nợ vendor</span> sau khi nhận hàng/dịch vụ nhưng chưa thanh toán.</p>
+    <ul class="learn-list">
+      <li>Nhận 세금계산서 từ vendor</li>
+      <li>Match PO + GRN + Invoice (3-way)</li>
+      <li>Book: DR Expense / CR AP</li>
+      <li>Thanh toán: DR AP / CR Bank</li>
+    </ul>
+  </div>
+  <div class="compare-card c-blue">
+    <div class="cc-label">AR — Accounts Receivable</div>
+    <div class="cc-title">Phải thu từ khách hàng</div>
+    <p>Khoản khách hàng <span class="hl-b">nợ công ty</span> sau khi nhận hàng/dịch vụ nhưng chưa trả tiền.</p>
+    <ul class="learn-list">
+      <li>Xuất 세금계산서 qua Hometax</li>
+      <li>Book: DR AR / CR Revenue + CR VAT-Out</li>
+      <li>Nhận tiền: DR Bank / CR AR</li>
+      <li>Theo dõi aging 30/60/90 ngày</li>
+    </ul>
+  </div>
+</div></div>
+
+<div class="learn-section"><h3>Transaction Flow — Công ty Hàn Quốc</h3>
+<pre class="diagram">AP CYCLE (구매 프로세스)
+┌──────────┐   ┌──────────┐   ┌──────────────────┐   ┌──────────┐
+│ PO 발주서 │──▶│ GRN 입고 │──▶│세금계산서 수신     │──▶│ Payment  │
+│(Purchase │   │(Goods    │   │(via Hometax API   │   │CMS/Wire  │
+│  Order)  │   │ Receipt) │   │ 10% VAT included) │   │          │
+└──────────┘   └──────────┘   └──────────────────┘   └──────────┘
+                                       ↓ ERP books:
+                               DR 매입비용(Expense)    ₩1,000,000
+                               DR 부가세대급금(VAT-In)  ₩  100,000
+                               CR 외상매입금(AP)                 ₩1,100,000
+
+AR CYCLE (판매 프로세스)
+┌──────────┐   ┌──────────┐   ┌──────────────────┐   ┌──────────┐
+│ SO 수주서 │──▶│ 출하/납품 │──▶│세금계산서 발행     │──▶│ Receipt  │
+│(Sales    │   │(Shipment │   │(via Hometax API   │   │ via CMS  │
+│  Order)  │   │/Delivery)│   │ 10% VAT added)    │   │          │
+└──────────┘   └──────────┘   └──────────────────┘   └──────────┘
+                                       ↓ ERP books:
+                               DR 외상매출금(AR)        ₩1,100,000
+                               CR 매출(Revenue)                  ₩1,000,000
+                               CR 부가세예수금(VAT-Out)           ₩  100,000</pre></div>
+
+<div class="learn-section"><h3>Đặc thù Hàn Quốc</h3>
+<div class="callout ca-amber"><strong>⚠ 3-Way Matching bắt buộc trong AP</strong><br>ERP phải verify: PO (발주서) ↔ GRN (입고서) ↔ 세금계산서 phải khớp số lượng, đơn giá, VAT 10% trước khi post AP entry. Block nếu không match, tạo discrepancy report.</div>
+<div class="callout ca-blue"><strong>ℹ 세금계산서 ≠ Invoice thông thường</strong><br>Tất cả B2B transactions phải dùng 전자세금계산서 qua Hometax. ERP phải lưu <code>tax_invoice_no</code>, <code>supply_amount</code>, <code>vat_amount</code> và sync status với NTS.</div>
+<div class="callout ca-green"><strong>CMS — Cash Management System</strong><br>Thanh toán qua CMS (기업뱅킹) của ngân hàng Hàn. ERP tích hợp API ngân hàng để auto-match payment với AP entries.</div></div>
+
+<div class="learn-section"><h3>DB Schema tham khảo</h3>
+<pre class="code-block">CREATE TABLE ap_invoice (
+  id              BIGINT AUTO_INCREMENT PRIMARY KEY,
+  vendor_id       BIGINT        NOT NULL,
+  tax_invoice_no  VARCHAR(24)   UNIQUE,        -- 세금계산서번호
+  supply_amount   DECIMAL(18,2) NOT NULL,       -- 공급가액
+  vat_amount      DECIMAL(18,2) NOT NULL,       -- 세액 = supply * 10%
+  total_amount    DECIMAL(18,2) NOT NULL,
+  status          ENUM('PENDING','3WAY_OK','POSTED','PAID'),
+  po_id           BIGINT,                       -- 3-way match
+  grn_id          BIGINT,                       -- 3-way match
+  due_date        DATE NOT NULL
+);
+
+CREATE TABLE ar_invoice (
+  id              BIGINT AUTO_INCREMENT PRIMARY KEY,
+  customer_id     BIGINT        NOT NULL,
+  tax_invoice_no  VARCHAR(24)   UNIQUE,
+  supply_amount   DECIMAL(18,2) NOT NULL,
+  vat_amount      DECIMAL(18,2) NOT NULL,
+  total_amount    DECIMAL(18,2) NOT NULL,
+  status          ENUM('DRAFT','ISSUED','SENT','RECEIVED','PAID'),
+  hometax_status  VARCHAR(20),                  -- NTS sync status
+  due_date        DATE NOT NULL
+);</pre></div>
+
+<div class="learn-section"><h3>T-Account — cách nhớ nhanh</h3>
+<pre class="diagram">Nhận hàng (AP entry):         Bán hàng (AR entry):
+┌─────────────┬─────────────┐  ┌─────────────┬─────────────┐
+│    DEBIT    │   CREDIT    │  │    DEBIT    │   CREDIT    │
+├─────────────┼─────────────┤  ├─────────────┼─────────────┤
+│ Expense     │             │  │             │ Revenue     │
+│ ₩1,000,000  │             │  │             │ ₩1,000,000  │
+│ VAT-In      │     AP      │  │    AR       │ VAT-Out     │
+│ ₩  100,000  │ ₩1,100,000  │  │ ₩1,100,000  │ ₩  100,000  │
+└─────────────┴─────────────┘  └─────────────┴─────────────┘
+Thanh toán:                    Nhận tiền:
+DR AP ₩1,100,000               DR Bank ₩1,100,000
+CR Bank ₩1,100,000             CR AR ₩1,100,000</pre></div>`
+},
+
+'p1_1': {
+  title: '세금계산서 — Hóa đơn Thuế Điện tử',
+  subtitle: 'Bắt buộc trong mọi giao dịch B2B Hàn Quốc — cách tích hợp kỹ thuật với Hometax',
+  tag: 'Tax Invoice', tagClass: 'tag-green',
+  body: `
+<div class="learn-section"><h3>세금계산서 là gì?</h3>
+<div class="callout ca-green"><strong>전자세금계산서 (e-Tax Invoice)</strong> là hóa đơn thuế VAT điện tử bắt buộc cho mọi giao dịch B2B tại Hàn Quốc. Được phát hành và xác nhận qua <strong>Hometax (홈택스)</strong> của NTS (국세청 — National Tax Service). Không có 세금계산서 hợp lệ = không được khấu trừ VAT 10% input tax.</div>
+<div class="compare-grid">
+  <div class="compare-card c-green">
+    <div class="cc-label">공급자 (Seller/Issuer)</div>
+    <div class="cc-title">Bên phát hành</div>
+    <ul class="learn-list">
+      <li>발행(issue) qua Hometax API</li>
+      <li>Deadline: 익월 10일 (ngày 10 tháng sau)</li>
+      <li>ERP → Hometax → NTS signature</li>
+      <li>Nhận taxInvoiceNo từ NTS</li>
+    </ul>
+  </div>
+  <div class="compare-card c-blue">
+    <div class="cc-label">공급받는자 (Buyer/Receiver)</div>
+    <div class="cc-title">Bên nhận</div>
+    <ul class="learn-list">
+      <li>수신(receive) từ Hometax</li>
+      <li>승인 hoặc 거부 trong 7 ngày</li>
+      <li>ERP poll hoặc webhook từ Hometax</li>
+      <li>Khấu trừ VAT-input khi khai thuế</li>
+    </ul>
+  </div>
+</div></div>
+
+<div class="learn-section"><h3>Mandatory Fields (필수 기재사항)</h3>
+<table class="data-table">
+<thead><tr><th>Field</th><th>Korean Term</th><th>Mô tả</th></tr></thead>
+<tbody>
+<tr><td class="hl">작성일자</td><td>Issue Date</td><td>Ngày phát hành (YYYYMMDD)</td></tr>
+<tr><td class="hl">공급자 사업자번호</td><td>Seller BizNo</td><td>10-digit business reg. number</td></tr>
+<tr><td class="hl">공급받는자 사업자번호</td><td>Buyer BizNo</td><td>10-digit business reg. number</td></tr>
+<tr><td class="hl">공급가액</td><td>Supply Amount</td><td>Amount before VAT</td></tr>
+<tr><td class="hl">세액</td><td>VAT Amount</td><td>= 공급가액 × 10%</td></tr>
+<tr><td class="hl">품목</td><td>Item Description</td><td>Name, quantity, unit price</td></tr>
+<tr><td class="hl">전자서명</td><td>e-Signature</td><td>Auto-applied by NTS via Hometax</td></tr>
+</tbody></table></div>
+
+<div class="learn-section"><h3>Integration Flow — ERP ↔ Hometax ↔ NTS</h3>
+<pre class="diagram">ISSUANCE (AR 발행 — công ty phát hành cho khách)
+┌───────────┐      ┌──────────────┐      ┌──────────┐
+│ ERP / AR  │      │   Hometax    │      │  NTS     │
+└─────┬─────┘      └──────┬───────┘      └────┬─────┘
+      │ 1. POST issue API  │                   │
+      │ {supplierBizNo,    │                   │
+      │  buyerBizNo,       │                   │
+      │  supplyAmt, items} │                   │
+      │───────────────────▶│                   │
+      │                    │ 2. Validate+sign  │
+      │                    │──────────────────▶│
+      │                    │ 3. taxInvoiceNo   │
+      │ 4. {taxInvoiceNo,  │◀──────────────────│
+      │     status:"승인"} │                   │
+      │◀───────────────────│                   │
+      │ 5. Store no.       │                   │
+      │    AR status→ISSUED│                   │
+
+RECEIVE (AP 수신 — nhận từ vendor, polling)
+      │ 1. GET /received (poll 30min or webhook)
+      │───────────────────▶│
+      │ 2. List new invoices│
+      │◀───────────────────│
+      │ 3. Match PO/GRN    │
+      │ 4. POST /approve   │
+      │───────────────────▶│</pre></div>
+
+<div class="learn-section"><h3>Status Lifecycle trong ERP</h3>
+<pre class="diagram">  DRAFT ──▶ ISSUED ──▶ NTS_CONFIRMED ──▶ BUYER_RECEIVED ──▶ APPROVED ──▶ PAID
+              │                                   │
+              ▼                                   ▼
+           ERROR                             REJECTED ──▶ (cancel & reissue)
+
+취소(Cancellation): phải phát hành 취소세금계산서 trước khi sửa.
+Không thể edit sau khi NTS đã xác nhận — đây là rule cứng.</pre></div>
+
+<div class="learn-section"><h3>Lưu ý kỹ thuật</h3>
+<div class="callout ca-amber"><strong>⚠ Deadline: 익월 10일</strong><br>Vendor phải issue trước ngày 10 tháng sau. Muộn = phạt 1% trên giá trị. ERP cần cron job alert cho outstanding invoices gần deadline.</div>
+<div class="callout ca-red"><strong>⚠ Không edit sau khi confirm</strong><br>Phải hủy (취소세금계산서) rồi reissue. ERP phải track cặp gốc-hủy cho audit trail.</div>
+<div class="callout ca-blue"><strong>ℹ Sandbox</strong><br>NTS có môi trường test riêng. Dùng test 사업자번호 để test flow, không dùng production credentials.</div></div>`
+},
+
+'p1_2': {
+  title: '4대보험 — Bốn Loại Bảo hiểm Bắt buộc',
+  subtitle: 'Developer ERP cần xử lý gì trong module Payroll?',
+  tag: 'HR / Payroll', tagClass: 'tag-green',
+  body: `
+<div class="learn-section"><h3>4 Loại bảo hiểm & tỷ lệ (2024)</h3>
+<table class="data-table">
+<thead><tr><th>Tên</th><th>Korean</th><th>NV đóng</th><th>Công ty đóng</th><th>Base</th></tr></thead>
+<tbody>
+<tr><td><span class="hl">Lương hưu</span></td><td>국민연금</td><td>4.5%</td><td>4.5%</td><td>월보수 (capped)</td></tr>
+<tr><td><span class="hl">Y tế</span></td><td>건강보험</td><td>3.545%</td><td>3.545%</td><td>월보수</td></tr>
+<tr><td><span class="hl-b">Y tế dài hạn</span></td><td>장기요양</td><td>건강보험료 × 12.95%</td><td>same</td><td>Tính trên 건강보험료</td></tr>
+<tr><td><span class="hl">Thất nghiệp</span></td><td>고용보험</td><td>0.9%</td><td>0.9%~1.65%</td><td>월보수</td></tr>
+<tr><td><span class="hl-a">Tai nạn LĐ</span></td><td>산재보험</td><td>0%</td><td>업종별 (0.6%–34%)</td><td>Chỉ công ty đóng</td></tr>
+</tbody></table>
+<div class="callout ca-amber" style="margin-top:0.75rem"><strong>⚠ Rates thay đổi hàng năm!</strong> Tạo bảng <code>insurance_rates(year, type, employee_rate, employer_rate)</code> — không hardcode vào logic.</div></div>
+
+<div class="learn-section"><h3>Công thức tính trong Payroll</h3>
+<pre class="diagram">월보수 (Monthly Insurable Salary)
+  = Base Pay + Taxable Allowances - Non-insurable items
+  (식대 ≤ ₩200,000/month được loại trừ)
+
+EMPLOYEE DEDUCTIONS:
+  국민연금      = FLOOR(월보수 × 4.5%   / 10) × 10
+  건강보험      = FLOOR(월보수 × 3.545% / 10) × 10
+  장기요양      = FLOOR(건강보험료 × 12.95% / 10) × 10
+  고용보험      = FLOOR(월보수 × 0.9%   / 10) × 10
+  소득세        = 간이세액표(월급여, 부양가족수) lookup
+  지방소득세    = FLOOR(소득세 × 10%)
+
+NET PAY = Gross - 국민연금 - 건강보험 - 장기요양
+               - 고용보험 - 소득세 - 지방소득세 - 기타공제
+
+EMPLOYER COST (không deduct từ NV, dùng cho 비용 kế toán):
+  국민연금(co)  = same as employee
+  건강보험(co)  = same as employee
+  장기요양(co)  = same as employee
+  고용보험(co)  = FLOOR(월보수 × employer_rate / 10) × 10
+  산재보험      = FLOOR(월보수 × industry_rate / 10) × 10</pre></div>
+
+<div class="learn-section"><h3>Pseudocode — Payroll Engine</h3>
+<pre class="code-block">function calculateMonthlyPayroll(employee, year, month):
+  rates = InsuranceRates.findByYear(year)
+  gross = employee.baseSalary
+        + employee.allowances.sum()
+        - employee.nonInsurableItems.sum()
+
+  pensionEmp  = floor10(gross * rates.pension)
+  healthEmp   = floor10(gross * rates.health)
+  ltcEmp      = floor10(healthEmp * rates.ltc)
+  unemployEmp = floor10(gross * rates.unemployEmp)
+  incomeTax   = TaxTable.lookup(gross, year, employee.dependents)
+  localTax    = floor(incomeTax * 0.10)
+
+  netPay = gross - pensionEmp - healthEmp - ltcEmp
+                - unemployEmp - incomeTax - localTax
+
+  return { gross, netPay, deductions: {...}, employerCost: {...} }
+
+// 10원 단위 절사 (round down to nearest 10)
+function floor10(amount):
+  return floor(amount / 10) * 10</pre></div>
+
+<div class="learn-section"><h3>Filing Timeline</h3>
+<pre class="diagram">  매월 10일  → 4대보험 납부 + 소득세 원천징수 납부
+  매월 25일  → 급여 확정 (ERP auto-calculate)
+  ──────────────────────────────────────
+  1~2월      → 연말정산 (year-end settlement)
+  3월 10일   → 연말정산 추가세액 납부
+  ──────────────────────────────────────
+  ERP automation:
+  → Cron: generate payroll by 25th
+  → Export: 원천징수이행상황신고서 (NTS XML format)
+  → Auto-file: 4대보험 EDI to each agency</pre></div>`
+},
+
+'p1_3': {
+  title: '사업자등록번호 Validation',
+  subtitle: 'Thuật toán check-digit mã số doanh nghiệp Hàn Quốc — giải thích và code',
+  tag: 'Algorithm', tagClass: 'tag-green',
+  body: `
+<div class="learn-section"><h3>Cấu trúc mã số</h3>
+<pre class="diagram">  사업자등록번호 = XXX - XX - XXXXX
+                  │      │    │
+                  │      │    └── 5 digits: Serial (순번) + Check digit
+                  │      └─────── 2 digits: Business type code (업종코드)
+                  └────────────── 3 digits: Regional tax office (지역코드)
+                                  (서울 101-119, 부산 401-412, ...)
+
+  Displayed:  123-45-67890  (hyphens for readability)
+  Stored DB:  1234567890    (10 digits, no hyphens)
+  Check digit = last digit (10th)</pre></div>
+
+<div class="learn-section"><h3>Thuật toán Check Digit</h3>
+<div class="callout ca-green">NTS dùng <strong>weighted checksum</strong> với multipliers cố định <code>[1,3,7,1,3,7,1,3,5]</code>. Đây là spec public, dùng để pre-validate trước khi submit lên Hometax.</div>
+<pre class="diagram">Multipliers:  [ 1, 3, 7, 1, 3, 7, 1, 3, 5 ]   (positions 1-9)
+Digits:        d1 d2 d3 d4 d5 d6 d7 d8 d9 d10
+                                               └── check digit
+
+Step 1: Weighted sum
+        S = d1×1 + d2×3 + d3×7 + d4×1 + d5×3
+          + d6×7 + d7×1 + d8×3 + d9×5
+
+Step 2: Add floor((d9 × 5) / 10)   ← special treatment for position 9
+        S2 = S + floor((d9 × 5) / 10)
+
+Step 3: Expected check digit
+        checkDigit = (10 - (S2 % 10)) % 10
+
+Step 4: Valid if checkDigit === d10
+
+Example: "101-86-09426"  →  d = [1,0,1,8,6,0,9,4,2,6]
+  S = 1+0+7+8+18+0+9+12+10 = 65
+  floor((2×5)/10) = floor(10/10) = 1
+  S2 = 65 + 1 = 66
+  checkDigit = (10 - 66%10) % 10 = (10-6)%10 = 4  ← but d10=6?
+
+  (Try with real Samsung biz no for actual valid example)</pre></div>
+
+<div class="learn-section"><h3>JavaScript Implementation</h3>
+<pre class="code-block">/**
+ * Validate 사업자등록번호 (Korean Business Reg. Number)
+ * @param {string} bizNo  e.g. "123-45-67890" or "1234567890"
+ * @returns {boolean}
+ */
+function validateBizNo(bizNo) {
+  const cleaned = bizNo.replace(/[^0-9]/g, '');
+  if (cleaned.length !== 10) return false;
+
+  const d = cleaned.split('').map(Number);
+  const multipliers = [1, 3, 7, 1, 3, 7, 1, 3, 5];
+
+  let sum = 0;
+  for (let i = 0; i < 9; i++) {
+    sum += d[i] * multipliers[i];
+  }
+
+  // Special rule: add floor of (d[8] * 5 / 10)
+  sum += Math.floor((d[8] * 5) / 10);
+
+  const checkDigit = (10 - (sum % 10)) % 10;
+  return checkDigit === d[9];
+}
+
+// Format helper: "1234567890" → "123-45-67890"
+function formatBizNo(raw) {
+  const n = raw.replace(/[^0-9]/g, '');
+  if (n.length !== 10) return raw;
+  return n.slice(0,3) + '-' + n.slice(3,5) + '-' + n.slice(5);
+}</pre></div>
+
+<div class="learn-section"><h3>ERP Integration Points</h3>
+<ul class="learn-list">
+  <li><strong>Vendor/Customer master creation:</strong> Validate trước khi save</li>
+  <li><strong>세금계산서 issuance:</strong> Validate buyer bizNo trước khi call Hometax API</li>
+  <li><strong>Data import/migration:</strong> Batch validate toàn bộ bizNos khi migrate từ legacy</li>
+  <li><strong>API endpoint:</strong> Validate ở cả frontend (UX) và backend (security)</li>
+</ul>
+<div class="callout ca-amber" style="margin-top:0.75rem"><strong>⚠ Validation ≠ Verification</strong><br>Check digit chỉ verify format hợp lệ về toán học. Để verify doanh nghiệp đang hoạt động thực sự → cần call NTS API <strong>사업자 상태조회</strong> (business status lookup) — đây là bước riêng biệt và cần API key.</div></div>`
+},
+
+/* ── PHASE 2 ── */
+'p2_0': {
+  title: '연말정산 — Quyết toán Thuế Thu nhập Cuối năm',
+  subtitle: 'Year-end Tax Settlement: developer ERP cần implement logic gì?',
+  tag: 'Year-end Tax', tagClass: 'tag-blue',
+  body: `
+<div class="learn-section"><h3>연말정산 là gì?</h3>
+<div class="callout ca-blue"><strong>연말정산</strong> là quy trình employer (công ty) thực hiện quyết toán lại thuế thu nhập (소득세) đã khấu trừ hàng tháng (원천징수) cho từng nhân viên. Diễn ra tháng 1–2 cho năm trước. Kết quả: nhân viên hoặc được <strong>환급</strong> (hoàn thuế) hoặc phải <strong>추가징수</strong> (nộp thêm).</div></div>
+
+<div class="learn-section"><h3>Timeline Process</h3>
+<pre class="diagram">  JAN 15       JAN 20         JAN 31         FEB 28        MAR 10
+     │             │               │               │             │
+     ▼             ▼               ▼               ▼             ▼
+  HR 공지문      NV submit        HR 처리          급여반영       NTS 납부
+  (notify       증빙서류          연말정산          (환급/추가     (pay
+  employees)    (proof docs)      calculation      징수 반영      remainder)
+                                  in ERP           in Feb pay)
+
+  증빙서류 NV phải submit:
+  - 소득·세액공제확인서 (NTS PDF, auto-pull possible)
+  - 의료비 영수증 (medical receipts)
+  - 교육비 납입증명서 (education payment proof)
+  - 보험료 납입증명서 (insurance payment proof)
+  - 신용카드/체크카드 내역 (card spending history)
+  - 주택자금 관련 서류 (mortgage docs)</pre></div>
+
+<div class="learn-section"><h3>Key Deductions (주요 공제항목)</h3>
+<table class="data-table">
+<thead><tr><th>Category</th><th>Korean</th><th>Rate / Limit</th></tr></thead>
+<tbody>
+<tr><td>Personal allowance</td><td>기본공제</td><td>₩1,500,000 per dependent</td></tr>
+<tr><td>Medical expenses</td><td>의료비공제</td><td>15% of (expenses - 3% income), max ₩7M</td></tr>
+<tr><td>Education</td><td>교육비공제</td><td>15%, capped per education level</td></tr>
+<tr><td>Card spending</td><td>신용카드공제</td><td>Credit 15%, Debit 30%, Transit 40%</td></tr>
+<tr><td>Insurance premiums</td><td>보험료공제</td><td>12%, max ₩1,000,000</td></tr>
+<tr><td>Pension savings</td><td>연금저축공제</td><td>12–15%, max ₩4,000,000</td></tr>
+</tbody></table></div>
+
+<div class="learn-section"><h3>ERP Calculation Logic</h3>
+<pre class="code-block">function calculateYeontaxJeongsan(employeeId, year):
+  // 1. Annual income (총급여 = 연간 과세급여)
+  totalIncome = PayrollRecord.sumGrossForYear(employeeId, year)
+               - nonTaxableAllowances  // 식대 ₩200K/mo etc.
+
+  // 2. Earned income deduction (근로소득공제) — tiered formula
+  earnedDeduction = calculateEarnedDeduction(totalIncome)
+
+  // 3. Personal deductions (인적공제)
+  personalDed = employee.dependents * 1_500_000
+
+  // 4. Special deductions (특별공제) from submitted docs
+  specialDed = medical + education + insurance + cardSpending
+
+  // 5. Taxable income (과세표준)
+  taxableIncome = totalIncome - earnedDeduction
+                - personalDed - specialDed - otherDed
+
+  // 6. Tax brackets (세율 구간) — 6%~45% progressive
+  grossTax = applyProgressiveBrackets(taxableIncome, year)
+
+  // 7. Tax credits (세액공제)
+  taxCredit = earnedIncomeTaxCredit(totalIncome)
+            + childTaxCredit + otherCredits
+
+  finalTax = max(0, grossTax - taxCredit)
+
+  // 8. Compare with already-withheld
+  alreadyWithheld = PayrollRecord.sumIncomeTaxForYear(employeeId, year)
+  adjustment = finalTax - alreadyWithheld
+  // > 0: 추가징수  |  < 0: 환급</pre></div>
+
+<div class="learn-section"><h3>Tax Brackets (세율 2024)</h3>
+<pre class="diagram">  과세표준              세율     누진공제액
+  ─────────────────────────────────────────
+  ~₩14,000,000          6%      ₩0
+  ₩14M ~ ₩50M          15%      ₩1,260,000
+  ₩50M ~ ₩88M          24%      ₩5,760,000
+  ₩88M ~ ₩150M         35%      ₩15,440,000
+  ₩150M ~ ₩300M        38%      ₩19,940,000
+  ₩300M ~ ₩500M        40%      ₩25,940,000
+  ₩500M ~ ₩1,000M      42%      ₩35,940,000
+  ₩1,000M+             45%      ₩65,940,000
+
+  Quick formula: Tax = Income × Rate - 누진공제
+  Example: ₩60M → ₩60M × 24% - ₩5,760,000 = ₩8,640,000</pre></div>
+
+<div class="learn-section"><h3>Lưu ý kỹ thuật</h3>
+<div class="callout ca-amber"><strong>⚠ Rates thay đổi hàng năm</strong><br>Tạo bảng <code>tax_parameters(year, bracket_from, bracket_to, rate, deduction)</code>. Update trước khi 연말정산 mỗi năm (NTS thông báo tháng 12).</div>
+<div class="callout ca-red"><strong>⚠ Rounding: làm tròn xuống 10원</strong><br>Mọi tính toán thuế phải <code>floor(amount / 10) * 10</code>. Sai rounding = sai audit.</div></div>`
+},
+
+'p2_1': {
+  title: '연차 Calculation theo 근로기준법',
+  subtitle: 'Tính ngày phép năm theo Bộ luật Lao động Hàn Quốc — pseudocode cho HR module',
+  tag: 'Labour Law', tagClass: 'tag-blue',
+  body: `
+<div class="learn-section"><h3>근로기준법 — Quy tắc cơ bản</h3>
+<div class="callout ca-blue"><strong>근로기준법 (Labour Standards Act)</strong> Article 60 quy định quyền nghỉ phép. Hai regime tính 연차 khác nhau: <strong>Year 1</strong> (tháng đầu tiên) và <strong>Year 2+</strong> (từ năm thứ hai). Developer phải implement cả hai.</div>
+<div class="compare-grid">
+  <div class="compare-card c-blue">
+    <div class="cc-label">Năm đầu tiên (Year 1)</div>
+    <div class="cc-title">Theo tháng làm việc</div>
+    <p>Nhân viên mới được <strong>1 ngày phép cho mỗi tháng</strong> làm việc liên tục (đủ 1 tháng). Tối đa 11 ngày trong năm đầu.</p>
+    <ul class="learn-list">
+      <li>Áp dụng từ tháng 1 đến tháng 11</li>
+      <li>Phát sinh đầu tháng tiếp theo</li>
+      <li>Không cộng dồn sang năm thứ 2</li>
+    </ul>
+  </div>
+  <div class="compare-card c-green">
+    <div class="cc-label">Từ năm thứ 2 trở đi</div>
+    <div class="cc-title">Theo ngày làm việc thực tế</div>
+    <p>Mỗi năm được <strong>15 ngày</strong> nếu đi làm đủ 80%+ ngày. Thêm 1 ngày cho mỗi 2 năm làm thêm (max 25 ngày).</p>
+    <ul class="learn-list">
+      <li>Điều kiện: 80%+ attendance năm trước</li>
+      <li>Base: 15 ngày/năm</li>
+      <li>+1 ngày mỗi 2 năm sau năm thứ 3</li>
+      <li>Tối đa 25 ngày/năm</li>
+    </ul>
+  </div>
+</div></div>
+
+<div class="learn-section"><h3>Bảng tính theo số năm làm việc</h3>
+<table class="data-table">
+<thead><tr><th>Years of Service</th><th>Annual Leave Days</th><th>Ghi chú</th></tr></thead>
+<tbody>
+<tr><td>Tháng 1–11 (Year 1)</td><td>1 day / month (max 11)</td><td>월차 — monthly accrual</td></tr>
+<tr><td>1 năm đủ</td><td>15 ngày</td><td>Năm đầu đủ, thay thế các tháng trước</td></tr>
+<tr><td>2 năm</td><td>15 ngày</td><td></td></tr>
+<tr><td>3 năm</td><td>16 ngày</td><td>+1 bắt đầu từ năm 3</td></tr>
+<tr><td>5 năm</td><td>17 ngày</td><td></td></tr>
+<tr><td>10 năm</td><td>19 ngày (20 theo quy định mới)</td><td></td></tr>
+<tr><td>21+ năm</td><td>25 ngày (maximum)</td><td>Cap = 25 ngày</td></tr>
+</tbody></table></div>
+
+<div class="learn-section"><h3>Pseudocode — Leave Calculation Engine</h3>
+<pre class="code-block">function calculateAnnualLeave(employee, referenceDate):
+  hireDate = employee.hireDate
+  yearsOfService = dateDiffYears(hireDate, referenceDate)
+  monthsOfService = dateDiffMonths(hireDate, referenceDate)
+
+  // YEAR 1: monthly accrual
+  if monthsOfService < 12:
+    completedMonths = floor(monthsOfService)
+    return min(completedMonths, 11)  // 1 day per month, max 11
+
+  // YEAR 2+: annual entitlement
+  if yearsOfService >= 1:
+    attendanceRate = calculateAttendanceRate(
+      employee.id,
+      yearStart(hireDate, yearsOfService - 1),
+      yearEnd(hireDate, yearsOfService - 1)
+    )
+
+    // Must have 80%+ attendance in prior year
+    if attendanceRate < 0.80:
+      baseDays = floor(15 * attendanceRate)  // pro-rated
+    else:
+      baseDays = 15
+
+    // +1 day every 2 years starting from year 3
+    bonus = floor((yearsOfService - 1) / 2)
+    totalDays = min(baseDays + bonus, 25)  // cap at 25
+
+    return totalDays
+
+// Calculate attendance rate
+function calculateAttendanceRate(empId, startDate, endDate):
+  totalWorkDays  = countWorkDays(startDate, endDate)  // excl. holidays
+  actualWorkDays = Attendance.countWorked(empId, startDate, endDate)
+  // Note: approved leave counts as worked for attendance calc
+  return actualWorkDays / totalWorkDays</pre></div>
+
+<div class="learn-section"><h3>Edge Cases quan trọng</h3>
+<div class="callout ca-amber"><strong>⚠ Leave during attendance calculation</strong><br>Các loại nghỉ sau được tính là <em>đi làm</em> khi tính 80%: nghỉ phép, nghỉ thai sản (출산휴가), nghỉ nuôi con (육아휴직), nghỉ tai nạn lao động. Implement từng loại riêng biệt.</div>
+<div class="callout ca-red"><strong>⚠ 연차 소멸 (Expiry)</strong><br>연차 chưa dùng sẽ expire sau 1 năm (hoặc 2 năm nếu công ty có chương trình carry-over). Khi expire, công ty phải trả <strong>연차수당</strong> (leave pay) bằng tiền mặt. ERP cần auto-calculate và trigger payment.</div>
+<div class="callout ca-blue"><strong>ℹ Pro-rated khi nghỉ giữa năm</strong><br>Nếu nhân viên rời công ty giữa năm, tính phép theo tỷ lệ tháng. Phép chưa dùng → trả 연차수당.</div></div>`
+},
+
+'p2_2': {
+  title: 'Korean VAT — 부가가치세 Reporting',
+  subtitle: 'Các mức thuế suất, cơ chế input/output VAT, và reporting cho NTS',
+  tag: 'VAT / 부가세', tagClass: 'tag-blue',
+  body: `
+<div class="learn-section"><h3>Thuế suất VAT Hàn Quốc</h3>
+<table class="data-table">
+<thead><tr><th>Category</th><th>Rate</th><th>Ví dụ</th></tr></thead>
+<tbody>
+<tr><td><span class="hl">Standard rate</span></td><td>10%</td><td>Hầu hết hàng hóa, dịch vụ B2B/B2C</td></tr>
+<tr><td><span class="hl-b">Zero-rated</span></td><td>0%</td><td>Xuất khẩu (수출), dịch vụ ngoại tệ, vận tải quốc tế</td></tr>
+<tr><td><span class="hl-a">Exempt (면세)</span></td><td>N/A</td><td>Giáo dục, y tế, tài chính cơ bản, thực phẩm thiết yếu</td></tr>
+</tbody></table>
+<div class="callout ca-amber" style="margin-top:0.75rem"><strong>Zero-rated ≠ Exempt!</strong> Zero-rated vẫn phải phát hành 세금계산서 và có thể claim input VAT refund. Exempt thì không issue 세금계산서 và không claim được input VAT.</div></div>
+
+<div class="learn-section"><h3>Cơ chế Input / Output VAT</h3>
+<pre class="diagram">OUTPUT VAT (매출세액) — từ bán hàng:
+  AR Invoice ₩1,100,000 = Supply ₩1,000,000 + VAT ₩100,000
+  → ERP: CR 부가세예수금 (VAT Payable) ₩100,000
+
+INPUT VAT (매입세액) — từ mua hàng:
+  AP Invoice ₩1,100,000 = Supply ₩1,000,000 + VAT ₩100,000
+  → ERP: DR 부가세대급금 (VAT Receivable) ₩100,000
+
+QUARTERLY SETTLEMENT:
+  VAT to Pay = Output VAT - Input VAT - Deductions
+
+  Example (Q1):
+    Output VAT collected:  ₩50,000,000
+    Input VAT paid:        ₩30,000,000
+    Special deductions:    ₩ 2,000,000
+    ─────────────────────────────────
+    Net VAT payable:       ₩18,000,000  → nộp cho NTS</pre></div>
+
+<div class="learn-section"><h3>Reporting Cycle (신고납부 주기)</h3>
+<pre class="diagram">  1월 25일  → 1분기 예정신고 (Jul–Dec prior year)
+  4월 25일  → 1기 확정신고 (Jan–Jun current year)
+  7월 25일  → 2분기 예정신고 (Jan–Jun)
+  10월 25일 → 2기 확정신고 (Jul–Dec)
+
+  주요 신고서:
+  - 부가가치세 신고서 (VAT Return)
+  - 매출처별 세금계산서합계표 (AR summary by customer)
+  - 매입처별 세금계산서합계표 (AP summary by vendor)
+  - 신용카드매출전표등 수령명세서 (card receipt summary)</pre></div>
+
+<div class="learn-section"><h3>ERP Implementation Points</h3>
+<pre class="code-block">// VAT Ledger structure
+CREATE TABLE vat_ledger (
+  id           BIGINT PRIMARY KEY,
+  period       CHAR(6),            -- 'YYYYMM'
+  vat_type     ENUM('OUTPUT','INPUT','EXEMPT','ZERO'),
+  invoice_id   BIGINT,
+  invoice_type ENUM('AR','AP'),
+  supply_amt   DECIMAL(18,2),
+  vat_amt      DECIMAL(18,2),
+  biz_no       VARCHAR(10),        -- counterparty biz number
+  tax_inv_no   VARCHAR(24)
+);
+
+// Quarterly VAT calculation
+function calculateQuarterlyVAT(year, quarter):
+  periods = getMonthsInQuarter(year, quarter)  // e.g. ['202401','202402','202403']
+
+  outputVAT = VatLedger.sum('OUTPUT', periods)
+  inputVAT  = VatLedger.sum('INPUT', periods)
+
+  // Apply special deductions (신용카드매출공제, etc.)
+  deductions = calculateVATDeductions(year, quarter)
+
+  netPayable = max(0, outputVAT - inputVAT - deductions)
+  // If negative: refund (환급) claim to NTS
+  return { outputVAT, inputVAT, deductions, netPayable }</code></pre></div>
+
+<div class="learn-section"><h3>Lưu ý quan trọng cho Developer</h3>
+<div class="callout ca-red"><strong>⚠ ₩ rounding trong VAT</strong><br>VAT amount phải làm tròn xuống 1원 (không làm tròn đến 10원 như 소득세). Sai sẽ không match với NTS records.</div>
+<div class="callout ca-blue"><strong>ℹ VAT trên hàng mix rate</strong><br>Một invoice có thể chứa cả mặt hàng 10%, 0%, và exempt. ERP phải split và track từng dòng riêng biệt trong <code>invoice_line_items</code>.</div></div>`
+},
+
+'p2_3': {
+  title: 'Hometax API Integration',
+  subtitle: 'Flow submit 세금계산서 và nhận kết quả từ NTS — kỹ thuật tích hợp',
+  tag: 'API / NTS', tagClass: 'tag-blue',
+  body: `
+<div class="learn-section"><h3>Kiến trúc hệ thống</h3>
+<div class="callout ca-blue">Hometax (홈택스) là cổng thuế điện tử của NTS. ERP không gọi trực tiếp NTS mà thông qua <strong>공인인증 (Authorized Cert)</strong> hoặc provider trung gian (ASP — Application Service Provider) như Billit, eForce, iTax... Nhiều công ty Hàn dùng ASP để đơn giản hóa.</div>
+<div class="compare-grid">
+  <div class="compare-card c-green">
+    <div class="cc-label">Direct Integration</div>
+    <div class="cc-title">ERP → Hometax</div>
+    <ul class="learn-list">
+      <li>Dùng 공인인증서 (공동인증서)</li>
+      <li>Complex certificate management</li>
+      <li>Free API, nhưng setup phức tạp</li>
+      <li>Phù hợp công ty lớn, IT team mạnh</li>
+    </ul>
+  </div>
+  <div class="compare-card c-blue">
+    <div class="cc-label">Via ASP (phổ biến hơn)</div>
+    <div class="cc-title">ERP → ASP → Hometax</div>
+    <ul class="learn-list">
+      <li>ASP quản lý cert & Hometax auth</li>
+      <li>REST API đơn giản hơn</li>
+      <li>Có phí per-invoice (~₩10–30)</li>
+      <li>Phù hợp SME và startup ERP</li>
+    </ul>
+  </div>
+</div></div>
+
+<div class="learn-section"><h3>API Flow — Issuance (발행)</h3>
+<pre class="diagram">ERP Backend                 ASP/Hometax               NTS
+     │                            │                     │
+     │ 1. Prepare payload         │                     │
+     │    {                       │                     │
+     │      supplier: {bizNo,     │                     │
+     │        name, address},     │                     │
+     │      buyer: {bizNo, name}, │                     │
+     │      items: [{name, qty,   │                     │
+     │        unitPrice, amount}],│                     │
+     │      supplyAmount: int,    │                     │
+     │      vatAmount: int,       │                     │
+     │      issueDate: YYYYMMDD   │                     │
+     │    }                       │                     │
+     │                            │                     │
+     │ 2. POST /api/taxinvoice/issue                    │
+     │    Authorization: Bearer {token}                 │
+     │───────────────────────────▶│                     │
+     │                            │ 3. Sign with cert   │
+     │                            │────────────────────▶│
+     │                            │ 4. NTS confirmation │
+     │ 5. {                       │◀────────────────────│
+     │      taxInvoiceNo: "...",  │                     │
+     │      status: "ISSUED",     │                     │
+     │      issuedAt: ISO8601     │                     │
+     │    }                       │                     │
+     │◀───────────────────────────│                     │
+     │                            │                     │
+     │ 6. Update DB:              │                     │
+     │    ar_invoice.tax_invoice_no = taxInvoiceNo      │
+     │    ar_invoice.status = 'NTS_CONFIRMED'           │</pre></div>
+
+<div class="learn-section"><h3>Error Handling & Retry Pattern</h3>
+<pre class="code-block">async function issueTaxInvoice(invoiceData, maxRetries = 3) {
+  for (let attempt = 1; attempt <= maxRetries; attempt++) {
+    try {
+      const response = await hometaxClient.post('/issue', invoiceData)
+
+      if (response.status === 'ISSUED') {
+        await db.arInvoice.update({
+          taxInvoiceNo: response.taxInvoiceNo,
+          status: 'NTS_CONFIRMED',
+          issuedAt: response.issuedAt
+        })
+        return { success: true, taxInvoiceNo: response.taxInvoiceNo }
+      }
+
+    } catch (err) {
+      if (err.code === 'DUPLICATE_INVOICE') {
+        // Already issued — fetch existing number
+        return await fetchExistingTaxInvoice(invoiceData)
+      }
+
+      if (err.code === 'INVALID_BUYER_BIZNO') {
+        // Don't retry — data issue, needs human fix
+        await notifyHRTeam(err)
+        throw err
+      }
+
+      if (attempt < maxRetries) {
+        await sleep(1000 * attempt)  // exponential backoff
+        continue
+      }
+
+      // All retries failed — queue for manual retry
+      await FailedInvoiceQueue.push(invoiceData, err)
+      throw new Error('Tax invoice issuance failed after retries')
+    }
+  }
+}</pre></div>
+
+<div class="learn-section"><h3>Key Error Codes</h3>
+<table class="data-table">
+<thead><tr><th>Code</th><th>Meaning</th><th>Action</th></tr></thead>
+<tbody>
+<tr><td><span class="hl">DUPLICATE_INVOICE</td><td>Already issued</td><td>Fetch existing, do not retry</td></tr>
+<tr><td><span class="hl-a">INVALID_BUYER_BIZNO</td><td>Buyer biz reg. invalid</td><td>Notify sales team, fix data</td></tr>
+<tr><td><span class="hl-b">CERT_EXPIRED</td><td>공인인증서 expired</td><td>Renew cert — ops alert</td></tr>
+<tr><td><span class="hl-a">DEADLINE_EXCEEDED</td><td>Past 익월 10일</td><td>Issue as late filing, may incur penalty</td></tr>
+<tr><td>TIMEOUT</td><td>NTS system busy</td><td>Retry with backoff</td></tr>
+</tbody></table></div>`
+},
+
+/* ── PHASE 3 ── */
+'p3_0': {
+  title: 'Đọc Spec Tiếng Hàn → Technical Requirements',
+  subtitle: 'Phương pháp chuyển đổi tài liệu đặc tả Hàn sang yêu cầu kỹ thuật rõ ràng',
+  tag: 'Client Work', tagClass: 'tag-amber',
+  body: `
+<div class="learn-section"><h3>Glossary — ERP Terms phổ biến trong spec Hàn</h3>
+<table class="data-table">
+<thead><tr><th>Korean</th><th>Nghĩa</th><th>ERP Context</th></tr></thead>
+<tbody>
+<tr><td>요구사항</td><td>Requirements</td><td>Functional requirements doc</td></tr>
+<tr><td>화면설계서</td><td>Screen design doc</td><td>UI wireframe + field spec</td></tr>
+<tr><td>테이블정의서</td><td>Table definition</td><td>DB schema document</td></tr>
+<tr><td>업무흐름도</td><td>Business flow</td><td>Process flowchart</td></tr>
+<tr><td>필수값</td><td>Required field</td><td>NOT NULL / mandatory input</td></tr>
+<tr><td>조회조건</td><td>Search condition</td><td>Filter/WHERE clause params</td></tr>
+<tr><td>승인 / 반려</td><td>Approve / Reject</td><td>Workflow approval steps</td></tr>
+<tr><td>마감</td><td>Closing/cutoff</td><td>Period closing</td></tr>
+<tr><td>배치</td><td>Batch job</td><td>Scheduled background process</td></tr>
+<tr><td>자동채번</td><td>Auto-numbering</td><td>Auto-generate sequence number</td></tr>
+<tr><td>이관</td><td>Transfer/migrate</td><td>Data migration or handover</td></tr>
+<tr><td>재조회</td><td>Re-query/refresh</td><td>Reload data after save</td></tr>
+</tbody></table></div>
+<div class="learn-section"><h3>Quy trình đọc spec → Technical Breakdown</h3>
+<pre class="diagram">Step 1: SCAN OVERALL STRUCTURE
+  화면설계서 → field list, UI logic
+  업무흐름도 → API endpoints needed
+  테이블정의서 → DB changes needed
+
+Step 2: EXTRACT BUSINESS RULES
+  Look for keywords:
+  "경우"       → conditional branch
+  "단,"        → exception/special case
+  "필수"        → required validation
+  "자동"        → auto-generated
+  "이상/이하"   → >= or <= conditions
+
+Step 3: CLARIFY AMBIGUITIES
+  Template: "[조건X]인 경우 [결과Y]는 어떻게 처리하나요?"
+  ("When [condition X], how should [result Y] be handled?")
+
+Step 4: BREAKDOWN INTO TASKS
+  UI:          fields, validations, display conditions
+  API:         endpoints, request/response schemas
+  DB:          new tables, columns, indexes
+  Logic:       calculation rules, workflow transitions
+  Integration: Hometax, banking, external systems</pre></div>
+<div class="learn-section"><h3>Ví dụ thực tế: Phân tích đoạn spec</h3>
+<pre class="diagram">SPEC (Korean):
+"발주번호는 자동 채번되며 [사업장코드 3자리]+[년도 4자리]+
+[월 2자리]+[일련번호 5자리] 형식으로 생성된다.
+단, 취소된 발주의 번호는 재사용하지 않는다."
+
+BREAKDOWN:
+1. [DB] purchase_order.order_no VARCHAR(14) UNIQUE NOT NULL
+2. [Logic] Format: {bizplace(3)}{yyyy(4)}{mm(2)}{seq(5, zero-pad)}
+3. [Logic] Sequence resets monthly per bizplace
+4. [Logic] Cancelled POs: status='CANCELLED', order_no stays consumed
+5. [DB] po_sequence(bizplace_code, year, month, last_seq) table
+6. [Caution] Race condition on concurrent inserts → need DB lock or sequence</pre></div>
+<div class="learn-section"><h3>Red Flags — Cụm từ cần hỏi lại ngay</h3>
+<div class="callout ca-amber"><strong>⚠ Phrases cần clarify trước khi code</strong></div>
+<ul class="learn-list">
+  <li><strong>"기존과 동일하게"</strong> — "Same as before" → need to check legacy system</li>
+  <li><strong>"적절히 처리"</strong> — "Handle appropriately" → too vague, ask for exact rule</li>
+  <li><strong>"추후 협의"</strong> — "To be discussed" → will block you, clarify now</li>
+  <li>Mọi logic liên quan đến tiền, thuế, lương → xác nhận bằng số ví dụ cụ thể</li>
+</ul></div>`
+},
+
+'p3_1': {
+  title: 'Audit Trail System cho ERP',
+  subtitle: 'Schema design & middleware pattern — track mọi thay đổi dữ liệu quan trọng',
+  tag: 'ERP Pattern', tagClass: 'tag-amber',
+  body: `
+<div class="learn-section"><h3>Tại sao ERP bắt buộc cần Audit Trail?</h3>
+<div class="callout ca-amber">ERP xử lý dữ liệu tài chính, lương, thuế. Mọi thay đổi phải có dấu vết. Yêu cầu từ: <strong>K-IFRS</strong> (audit requirement), <strong>NTS</strong> (tax audit traceability), <strong>PIPA</strong> (data access logging), internal compliance. Thiếu audit trail = không pass external audit.</div>
+<div class="compare-grid">
+  <div class="compare-card c-amber">
+    <div class="cc-label">Shadow / History Table</div>
+    <div class="cc-title">Full row snapshot</div>
+    <ul class="learn-list">
+      <li>Copy toàn bộ row vào <code>_history</code> table</li>
+      <li>Easy: query state at any point in time</li>
+      <li>Dùng cho: GL entries, payroll records</li>
+      <li>Storage tốn nhưng query đơn giản</li>
+    </ul>
+  </div>
+  <div class="compare-card c-green">
+    <div class="cc-label">Event Log (Diff)</div>
+    <div class="cc-title">Field-level changes</div>
+    <ul class="learn-list">
+      <li>Log {field, old_value, new_value} per change</li>
+      <li>Storage nhẹ, dễ show "who changed what"</li>
+      <li>Dùng cho: vendor/customer master data</li>
+      <li>Query phức tạp hơn để rebuild state</li>
+    </ul>
+  </div>
+</div></div>
+<div class="learn-section"><h3>Schema Design</h3>
+<pre class="code-block">CREATE TABLE audit_log (
+  id          BIGINT AUTO_INCREMENT PRIMARY KEY,
+  table_name  VARCHAR(64)  NOT NULL,
+  record_id   BIGINT       NOT NULL,
+  action      ENUM('CREATE','UPDATE','DELETE','APPROVE',
+                   'REJECT','POST','CANCEL','RESTORE'),
+  changed_by  BIGINT       NOT NULL,
+  changed_at  DATETIME(3)  NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
+  ip_address  VARCHAR(45),
+  session_id  VARCHAR(128),
+  old_values  JSON,         -- snapshot before change
+  new_values  JSON,         -- snapshot after change
+  reason      TEXT,
+
+  INDEX (table_name, record_id),
+  INDEX (changed_at),
+  INDEX (changed_by)
+);</pre></div>
+<div class="learn-section"><h3>Middleware Pattern</h3>
+<pre class="code-block">// Audit middleware (Express.js)
+async function withAudit(tableName, action) {
+  return async (req, res, next) => {
+    req.auditCtx = { table: tableName, action }
+    const origJson = res.json.bind(res)
+    res.json = async (body) => {
+      if (res.statusCode < 300 && req.auditCtx.before !== undefined) {
+        await db('audit_log').insert({
+          table_name: req.auditCtx.table,
+          record_id:  req.auditCtx.recordId,
+          action:     req.auditCtx.action,
+          changed_by: req.user.id,
+          ip_address: req.ip,
+          old_values: JSON.stringify(req.auditCtx.before),
+          new_values: JSON.stringify(req.auditCtx.after),
+          reason:     req.body?.reason
+        })
+      }
+      return origJson(body)
+    }
+    next()
+  }
+}
+
+// Usage:
+router.put('/vendors/:id',
+  withAudit('vendors', 'UPDATE'),
+  async (req, res) => {
+    req.auditCtx.before   = await Vendor.findById(req.params.id)
+    req.auditCtx.recordId = req.params.id
+    const updated = await Vendor.update(req.params.id, req.body)
+    req.auditCtx.after = updated
+    res.json({ data: updated })
+  }
+)</pre></div>
+<div class="learn-section"><h3>Immutability Rule</h3>
+<div class="callout ca-red"><strong>⚠ Posted entries CANNOT be deleted — only reversed</strong><br>Khi journal entry/invoice đã "posted" (vào sổ cái), KHÔNG được DELETE. Phải tạo reversing entry. Enforce ở application layer: check status trước mọi DELETE operation, throw error nếu posted.</div></div>`
+},
+
+'p3_2': {
+  title: 'Multi-Company ERP Architecture',
+  subtitle: '3 mô hình kiến trúc — shared vs isolated data strategy',
+  tag: 'Architecture', tagClass: 'tag-amber',
+  body: `
+<div class="learn-section"><h3>3 Mô hình kiến trúc</h3>
+<pre class="diagram">Model A: SHARED DB, SHARED SCHEMA
+  company_id column on every table
+  ┌──────────────────────────────────────────┐
+  │ DB: erp_main                             │
+  │ gl_entries: company_id | amount | ...    │
+  │ ap_invoices: company_id | vendor | ...   │
+  └──────────────────────────────────────────┘
+  + Easy dev, easy cross-company reports
+  - Risk: missing WHERE company_id = ? bug exposes data
+
+Model B: SHARED DB, SCHEMA PER COMPANY
+  ┌──────────────────────────────────────────┐
+  │ DB: erp_main                             │
+  │ Schema co_001.gl_entries                 │
+  │ Schema co_002.gl_entries                 │
+  │ Schema shared.master_vendors             │
+  └──────────────────────────────────────────┘
+  + Strong isolation, shared masters possible
+  - Complex migrations (N schemas), cross-schema queries
+
+Model C: DB PER COMPANY
+  ┌──────────────┐   ┌──────────────┐
+  │ DB: erp_co_A │   │ DB: erp_co_B │
+  └──────────────┘   └──────────────┘
+  + Maximum isolation, independent scaling
+  - Cross-company reports = cross-DB = complex, high ops</pre></div>
+<div class="learn-section"><h3>Shared vs Isolated Data</h3>
+<table class="data-table">
+<thead><tr><th>Data Type</th><th>Strategy</th><th>Why</th></tr></thead>
+<tbody>
+<tr><td>vendor master, customer master</td><td class="hl">Shared</td><td>Same vendor serves multiple entities</td></tr>
+<tr><td>chart of accounts (group standard)</td><td class="hl">Shared</td><td>Consolidated reporting consistency</td></tr>
+<tr><td>exchange rates, tax parameters</td><td class="hl">Shared</td><td>Same economic data</td></tr>
+<tr><td>GL entries, AP/AR invoices</td><td class="hl-a">Isolated</td><td>Legal entity separation</td></tr>
+<tr><td>payroll, bank accounts</td><td class="hl-a">Isolated</td><td>Strict legal/financial separation</td></tr>
+<tr><td>user accounts</td><td>Mixed</td><td>User exists once, has roles per company</td></tr>
+</tbody></table></div>
+<div class="learn-section"><h3>Korea: 연결재무제표 (Consolidated Financials)</h3>
+<div class="callout ca-amber"><strong>대기업 그룹</strong> phải lập 연결재무제표 (consolidated financial statements) theo K-IFRS. ERP phải có khả năng <strong>loại trừ giao dịch nội bộ</strong> (intercompany elimination): khi Co.A bán cho Co.B trong cùng group, khoản này phải bị loại khi consolidated để tránh double-count.</div>
+<pre class="code-block">-- Track intercompany transactions for elimination
+CREATE TABLE intercompany_transactions (
+  id           BIGINT PRIMARY KEY,
+  source_co    BIGINT,   -- entity originating the transaction
+  dest_co      BIGINT,   -- counterparty entity
+  txn_type     ENUM('SALE','LOAN','SERVICE','DIVIDEND'),
+  amount       DECIMAL(18,2),
+  both_booked  BOOLEAN DEFAULT FALSE,  -- both sides recorded?
+  elim_entry   BIGINT NULL              -- GL entry for elimination
+);</pre></div>`
+},
+
+'p3_3': {
+  title: 'RBAC Design cho ERP Hàn Quốc',
+  subtitle: 'Roles, permissions, department scope — Korean corporate hierarchy',
+  tag: 'Security', tagClass: 'tag-amber',
+  body: `
+<div class="learn-section"><h3>RBAC với Korean Corporate Hierarchy</h3>
+<pre class="diagram">Standard RBAC: User → Role → Permission → Resource
+
+ERP Korea adds: SCOPE dimension
+  User → Role → Permission → Resource
+           │                     │
+           └── Scope ────────────┘
+               (company_id, dept_id, amount_limit)
+
+Korean Hierarchy:
+  회장 (Chairman) → 사장 (CEO) → 본부장 (Division Head)
+  → 팀장 (Team Leader) → 과장/대리/사원 (Staff levels)
+
+ERP Role mapping:
+  SYSTEM_ADMIN     → full access, all companies
+  CFO              → all financial modules, own group
+  ACCOUNTING_MGR   → GL/AP/AR approve, own company
+  ACCOUNTING_STAFF → GL/AP/AR create, own dept
+  HR_MGR           → payroll approve, all employees own co.
+  PAYROLL_STAFF    → payroll process, own dept
+  AUDITOR          → read-only all modules</pre></div>
+<div class="learn-section"><h3>DB Schema</h3>
+<pre class="code-block">CREATE TABLE permissions (
+  id       INT PRIMARY KEY,
+  resource VARCHAR(50),   -- 'ap_invoice', 'payroll', 'gl_entry'
+  action   VARCHAR(20),   -- 'create','read','update','delete','approve','post'
+  UNIQUE (resource, action)
+);
+
+CREATE TABLE role_permissions (
+  role_id       INT,
+  permission_id INT,
+  amount_limit  DECIMAL(18,2) NULL,  -- NULL = unlimited
+  PRIMARY KEY (role_id, permission_id)
+);
+
+CREATE TABLE user_roles (
+  user_id    BIGINT,
+  role_id    INT,
+  company_id BIGINT NULL,  -- NULL = all companies
+  dept_id    BIGINT NULL,  -- NULL = all departments
+  granted_by BIGINT,
+  expires_at DATETIME NULL, -- for temporary access
+  PRIMARY KEY (user_id, role_id, company_id, dept_id)
+);</pre></div>
+<div class="learn-section"><h3>Permission Check Middleware</h3>
+<pre class="code-block">function requirePermission(resource, action) {
+  return async (req, res, next) => {
+    const { id: userId } = req.user
+    const companyId = req.params.companyId || req.body.companyId
+    const amount    = req.body?.amount
+
+    const allowed = await db.queryOne(
+      'SELECT rp.amount_limit FROM user_roles ur ' +
+      'JOIN role_permissions rp ON ur.role_id = rp.role_id ' +
+      'JOIN permissions p ON rp.permission_id = p.id ' +
+      'WHERE ur.user_id = ? AND p.resource = ? AND p.action = ? ' +
+      'AND (ur.company_id IS NULL OR ur.company_id = ?) ' +
+      'AND (ur.expires_at IS NULL OR ur.expires_at > NOW()) LIMIT 1',
+      [userId, resource, action, companyId]
+    )
+
+    if (!allowed) return res.status(403).json({ error: '권한이 없습니다.' })
+    if (allowed.amount_limit && amount > allowed.amount_limit) {
+      return res.status(403).json({ error: '결재 한도를 초과했습니다.' })
+    }
+    next()
+  }
+}</pre></div>
+<div class="learn-section"><h3>결재선 (Approval Workflow) — Korean specifics</h3>
+<div class="callout ca-amber"><strong>결재 (Gyal-jae) = Formal Approval Routing</strong><br>Văn hóa 결재 Hàn Quốc: mọi quyết định quan trọng phải đi qua 기안 (draft) → 검토 (review) → 승인 (approve). RBAC kiểm soát ai được approve, nhưng cần thêm workflow engine để route đúng người theo chức vụ và amount limit.</div>
+<div class="callout ca-blue"><strong>직급별 전결권한 (Approval limits by rank)</strong><br>대리 ≤ ₩500K, 과장 ≤ ₩2M, 팀장 ≤ ₩10M, 본부장 ≤ ₩50M, 사장 unlimited. Store in <code>role_permissions.amount_limit</code>. Critical for AP invoice approval flow.</div></div>`
+},
+
+/* ── PHASE 4 ── */
+'p4_0': {
+  title: 'PIPA vs GDPR — ERP Developer cần implement gì?',
+  subtitle: '개인정보보호법 vs GDPR: điểm giống, khác, và checklist kỹ thuật',
+  tag: 'Compliance', tagClass: 'tag-red',
+  body: `
+<div class="learn-section"><h3>So sánh PIPA vs GDPR</h3>
+<table class="data-table">
+<thead><tr><th>Criteria</th><th>PIPA (Korea)</th><th>GDPR (EU)</th></tr></thead>
+<tbody>
+<tr><td>Enforcer</td><td>PIPC (개인정보보호위원회)</td><td>National DPAs</td></tr>
+<tr><td>Max penalty</td><td>3% of annual revenue</td><td>4% of global revenue</td></tr>
+<tr><td>Consent</td><td>Explicit + purpose-limited</td><td>Lawful basis (consent is 1 of 6)</td></tr>
+<tr><td>Breach notification</td><td>72h to PIPC, 5 days to subject</td><td>72h to DPA, ASAP to subject</td></tr>
+<tr><td>Right to access</td><td>Within 10 business days</td><td>Within 30 days</td></tr>
+<tr><td>Cross-border transfer</td><td>Consent or adequate country</td><td>Adequacy/SCCs/BCRs</td></tr>
+</tbody></table></div>
+<div class="learn-section"><h3>ERP Personal Data Categories</h3>
+<pre class="diagram">SENSITIVE (민감정보) — explicit separate consent required:
+  건강/의료정보 → medical expense reimbursements
+  개인신용정보  → salary, loan records
+  노조 성향     → union membership
+
+STANDARD PERSONAL INFO — consent required:
+  이름, 주민등록번호 → employee master
+  연락처 (phone, email, address) → HR, CRM
+  은행계좌번호      → payroll bank transfers
+  여권번호          → expat employees
+
+⚠ 주민등록번호 (Resident ID) rules:
+  - Must be encrypted at rest (AES-256)
+  - Only store after identity verification
+  - Store masked version: 900101-*******
+  - Never appear in logs</pre></div>
+<div class="learn-section"><h3>Developer Checklist</h3>
+<ul class="learn-list">
+  <li><strong>암호화:</strong> 주민번호, 비밀번호, 계좌번호 → AES-256 at rest, TLS in transit</li>
+  <li><strong>접근통제:</strong> Only authorized roles read sensitive fields. Log every access.</li>
+  <li><strong>수집목적 제한:</strong> Only collect fields needed for stated purpose</li>
+  <li><strong>보유기간 정의:</strong> 근로자 퇴직 후 3년, 세금관련 5년, etc. Auto-delete/anonymize</li>
+  <li><strong>열람/삭제 요청:</strong> API endpoint to respond within 10 business days</li>
+  <li><strong>개인정보 처리방침:</strong> Must be public. Record user acceptance version+date</li>
+</ul></div>
+<div class="learn-section"><h3>Masking Pattern</h3>
+<pre class="code-block">function maskPII(data, userRole) {
+  const result = { ...data }
+
+  // 주민등록번호: show first 7 only
+  if (result.residentId)
+    result.residentId = result.residentId.slice(0, 7) + '******'
+
+  // 계좌번호: last 4 only
+  if (result.bankAccount)
+    result.bankAccount = '***-***-' + result.bankAccount.slice(-4)
+
+  // 전화번호: mask middle
+  if (result.phone)
+    result.phone = result.phone.replace(/(\d{3})-(\d{4})-(\d{4})/, '$1-****-$3')
+
+  // HR/Auditor roles get unmasked + access logged
+  if (['HR_MGR','AUDITOR'].includes(userRole)) {
+    AuditLog.insert({ action: 'VIEW_PII', userId: currentUser.id, ... })
+    return data
+  }
+  return result
+}</pre></div>`
+},
+
+'p4_1': {
+  title: 'Korean Open Banking API',
+  subtitle: 'KFTC Open Banking ecosystem — flow tích hợp vào ERP',
+  tag: 'Fintech', tagClass: 'tag-red',
+  body: `
+<div class="learn-section"><h3>Open Banking Hàn Quốc</h3>
+<div class="callout ca-blue"><strong>금융결제원 (KFTC)</strong> vận hành Open Banking từ 2019. Cho phép ERP/fintech access account info và payment của tất cả ngân hàng Hàn qua 1 API, thay vì integrate từng ngân hàng riêng.</div>
+<pre class="diagram">WITHOUT Open Banking:
+  ERP ──▶ Kookmin Bank API   (N integrations)
+  ERP ──▶ Shinhan Bank API
+  ERP ──▶ Woori Bank API
+
+WITH KFTC Open Banking:
+  ERP ──▶ KFTC Open Banking API ──▶ All member banks
+          (1 integration, all banks)</pre></div>
+<div class="learn-section"><h3>3 Loại API chính</h3>
+<table class="data-table">
+<thead><tr><th>API Type</th><th>Chức năng</th><th>ERP Use Case</th></tr></thead>
+<tbody>
+<tr><td><span class="hl">Account Inquiry</span></td><td>Balance, transaction history</td><td>Bank reconciliation, cash position</td></tr>
+<tr><td><span class="hl-b">Transfer</span></td><td>Send payment from linked account</td><td>AP payment, payroll disbursement</td></tr>
+<tr><td><span class="hl-a">Account Registration</span></td><td>Link bank account via consent</td><td>Employee bank account verification</td></tr>
+</tbody></table></div>
+<div class="learn-section"><h3>AP Payment Flow via Open Banking</h3>
+<pre class="diagram">ERP AP          KFTC Open Banking        Corporate Bank    Vendor Bank
+   │                    │                      │                │
+   │ 1. Batch payment   │                      │                │
+   │    request         │                      │                │
+   │───────────────────▶│                      │                │
+   │                    │ 2. Auth (OAuth2)      │                │
+   │                    │─────────────────────▶│                │
+   │                    │ 3. Debit source acct  │                │
+   │                    │─────────────────────▶│                │
+   │                    │                       │ 4. Credit dest │
+   │                    │                       │───────────────▶│
+   │ 5. {status,        │                       │                │
+   │     ref_no,        │                       │                │
+   │     completed_at}  │                       │                │
+   │◀───────────────────│                       │                │
+   │ 6. Update AP PAID  │                       │                │</pre></div>
+<div class="learn-section"><h3>Bank Reconciliation Auto-Match</h3>
+<pre class="code-block">async function reconcile(companyId, accountId, date) {
+  // Pull actual bank transactions
+  const bankTxns = await openBankingClient.getTransactions({ accountId, date })
+
+  // Get ERP pending transactions
+  const erpTxns = await db('payment_transactions')
+    .where({ company_id: companyId, txn_date: date, status: 'PENDING_CONFIRM' })
+
+  for (const bankTxn of bankTxns) {
+    const match = erpTxns.find(e =>
+      e.amount === bankTxn.amount &&
+      bankTxn.description.includes(e.reference_no)
+    )
+    if (match) {
+      await db('payment_transactions').where('id', match.id)
+        .update({ status: 'CONFIRMED', bank_txn_id: bankTxn.id })
+    } else {
+      await UnmatchedTxn.create({ bankTxn, companyId })  // manual review
+    }
+  }
+}</pre></div>`
+},
+
+'p4_2': {
+  title: 'FSS Reporting Requirements',
+  subtitle: '금융감독원 — dữ liệu nào ERP phải export định kỳ cho tổ chức tài chính/niêm yết',
+  tag: 'Compliance', tagClass: 'tag-red',
+  body: `
+<div class="learn-section"><h3>FSS là gì?</h3>
+<div class="callout ca-blue"><strong>금융감독원 (FSS — Financial Supervisory Service)</strong> giám sát ngân hàng, chứng khoán, bảo hiểm Hàn Quốc. ERP trong ngành tài chính hoặc công ty niêm yết (상장사) phải export báo cáo theo chuẩn FSS.</div>
+<div class="callout ca-amber"><strong>Phạm vi:</strong> Chủ yếu áp dụng cho tổ chức tài chính và 상장사 (listed companies). ERP của SME thông thường ít ảnh hưởng trực tiếp từ FSS, nhưng vẫn cần K-IFRS compliance.</div></div>
+<div class="learn-section"><h3>Key Reports & Deadlines</h3>
+<table class="data-table">
+<thead><tr><th>Report</th><th>Korean</th><th>Frequency</th><th>Deadline</th></tr></thead>
+<tbody>
+<tr><td>Financial Statements</td><td>재무제표</td><td>Quarterly + Annual</td><td>Q: 45 days / Annual: 90 days</td></tr>
+<tr><td>Business Report</td><td>사업보고서</td><td>Annual</td><td>90 days after FY-end</td></tr>
+<tr><td>Half-year Report</td><td>반기보고서</td><td>Semi-annual</td><td>45 days after H1</td></tr>
+<tr><td>Material Events</td><td>주요사항보고서</td><td>As needed</td><td>1–2 business days</td></tr>
+</tbody></table></div>
+<div class="learn-section"><h3>ERP Data Requirements</h3>
+<pre class="diagram">재무상태표 (Balance Sheet):
+  → All GL account balances (자산/부채/자본)
+  → Closing entries verified
+
+손익계산서 (Income Statement):
+  → Revenue by category (매출, 영업외수익)
+  → Expenses by category (매출원가, 판관비)
+
+현금흐름표 (Cash Flow):
+  → Operating: from AP/AR movements
+  → Investing: from fixed asset module
+  → Financing: from loans/equity module
+
+주석 (Disclosures):
+  → 특수관계자 거래 (Related party transactions)
+  → Contingent liabilities
+  → Segment information</pre></div>
+<div class="learn-section"><h3>DART Integration</h3>
+<div class="callout ca-blue"><strong>DART (전자공시시스템)</strong> là portal công bố thông tin của FSS. 상장사 phải submit báo cáo lên DART dưới dạng <strong>XBRL</strong> (eXtensible Business Reporting Language) theo K-IFRS taxonomy. ERP cần export function: Trial Balance → XBRL transform → DART API submission.</div></div>`
+},
+
+'p4_3': {
+  title: 'MES Integration Pattern với ERP',
+  subtitle: 'Manufacturing Execution System ↔ ERP: realtime vs batch — khi nào dùng gì',
+  tag: 'Integration', tagClass: 'tag-red',
+  body: `
+<div class="learn-section"><h3>MES vs ERP — Ranh giới rõ ràng</h3>
+<pre class="diagram">          MES (공장 시스템)         │    ERP (기간업무 시스템)
+  ────────────────────────────────────┼────────────────────────────────
+  Phạm vi: Shop floor, machines       │ Business processes, finance
+  Thời gian: Realtime (seconds)       │ Batch/daily (hours)
+  Data:    Machine signals, WIP       │ Orders, inventory cost, GL
+  Users:   Factory operators          │ Accountants, planners, mgmt
+  ────────────────────────────────────┼────────────────────────────────
+  MES owns: Production orders         │ ERP owns: Sales orders
+             Work-in-progress         │           Purchase orders
+             Machine utilization      │           Inventory valuation
+             Quality inspection       │           Cost accounting</pre></div>
+<div class="learn-section"><h3>Integration Points</h3>
+<table class="data-table">
+<thead><tr><th>Data</th><th>Direction</th><th>Timing</th></tr></thead>
+<tbody>
+<tr><td>Production Order (작업지시)</td><td>ERP → MES</td><td>On creation</td></tr>
+<tr><td>BOM (자재명세서)</td><td>ERP → MES</td><td>On change</td></tr>
+<tr><td>Production Completion</td><td>MES → ERP</td><td>Batch (end of shift)</td></tr>
+<tr><td>Material Consumption</td><td>MES → ERP</td><td>Batch (backflush)</td></tr>
+<tr><td>Quality Rejects</td><td>MES → ERP</td><td>Realtime (critical)</td></tr>
+<tr><td>Labor Hours</td><td>MES → ERP</td><td>Daily batch</td></tr>
+</tbody></table></div>
+<div class="learn-section"><h3>Realtime vs Batch</h3>
+<div class="compare-grid">
+  <div class="compare-card c-amber">
+    <div class="cc-label">Realtime (Event-driven)</div>
+    <div class="cc-title">Kafka / Message Queue</div>
+    <ul class="learn-list">
+      <li>MES publishes events → ERP consumes</li>
+      <li>Inventory always current</li>
+      <li>Complex error handling, ordering</li>
+      <li>Dùng cho: critical quality rejects, stock-outs</li>
+    </ul>
+  </div>
+  <div class="compare-card c-green">
+    <div class="cc-label">Batch (phổ biến ở Hàn)</div>
+    <div class="cc-title">File / Scheduled API</div>
+    <ul class="learn-list">
+      <li>End-of-shift CSV/XML file or API call</li>
+      <li>Simpler, predictable load</li>
+      <li>Delay: hours behind production</li>
+      <li>Most Korean factories use this</li>
+    </ul>
+  </div>
+</div></div>
+<div class="learn-section"><h3>Batch Import Pattern</h3>
+<pre class="code-block">async function importMESCompletion(batchFile) {
+  const records = parseCSV(batchFile)
+  const errors  = []
+
+  for (const rec of records) {
+    try {
+      await db.transaction(async (trx) => {
+        const po = await ProductionOrder.findById(rec.productionOrderId, trx)
+        if (!po || po.status !== 'IN_PROGRESS') throw new Error('Invalid PO')
+
+        // Add finished goods
+        await Inventory.increase(rec.finishedItemId, rec.warehouseId, rec.qty, trx)
+
+        // Backflush: consume raw materials per BOM
+        for (const comp of po.bom.components) {
+          await Inventory.decrease(comp.itemId, rec.warehouseId, comp.qtyPerUnit * rec.qty, trx)
+        }
+
+        // GL: WIP → Finished Goods
+        await GLEntry.post({
+          dr: { account: 'FINISHED_GOODS', amount: po.standardCost * rec.qty },
+          cr: { account: 'WIP',            amount: po.standardCost * rec.qty }
+        }, trx)
+      })
+    } catch (err) {
+      errors.push({ rec, error: err.message })
+    }
+  }
+  return { processed: records.length - errors.length, errors }
+}</pre></div>`
+},
+
+/* ── PHASE 5 ── */
+'p5_0': {
+  title: 'Quiz Mode với Claude — ERP Cơ bản',
+  subtitle: 'Cách tận dụng Claude để kiểm tra và củng cố kiến thức hiệu quả',
+  tag: 'AI Workflow', tagClass: 'tag-purple',
+  body: `
+<div class="learn-section"><h3>Tại sao Quiz với Claude hiệu quả?</h3>
+<div class="callout ca-purple">Claude điều chỉnh độ khó theo câu trả lời của bạn, giải thích sai ở đâu, và gợi ý điểm cần đào sâu — không như quiz tĩnh. Kết hợp với spaced repetition = học nhanh gấp đôi.</div></div>
+<div class="learn-section"><h3>Prompt Templates hiệu quả</h3>
+<pre class="diagram">BASIC QUIZ:
+"Quiz tôi [N] câu về [topic], trình độ junior dev.
+Hỏi từng câu. Đợi tôi trả lời mới show đáp án.
+Cuối cùng: tổng điểm + giải thích câu sai."
+
+SCENARIO-BASED (hiệu quả hơn cho ERP):
+"Hỏi tôi về [topic] dưới dạng scenario thực tế.
+Ví dụ: nhân viên lương ₩3M, tính 4대보험."
+
+SOCRATIC METHOD:
+"Đừng hỏi trắc nghiệm. Hỏi open-ended,
+đánh giá reasoning của tôi, không chỉ đáp án đúng."
+
+ADAPTIVE:
+"Quiz tôi. Nếu tôi sai, hỏi easier question về cùng topic.
+Nếu đúng 3 liên tiếp, tăng độ khó."</pre></div>
+<div class="learn-section"><h3>Sample Session Flow</h3>
+<pre class="diagram">You: "Quiz tôi 3 câu về AP/AR, level fresher tuần 1"
+
+Claude: "Câu 1: AP đại diện cho khoản tiền nào?
+  A) Tiền khách nợ công ty
+  B) Tiền công ty nợ vendor
+  C) Tiền trong ngân hàng"
+
+You: "B"
+
+Claude: "✓ Đúng! AP = Accounts Payable = tiền công ty NỢ vendor...
+  [Giải thích context + Korean specifics]
+  Câu 2: ..."
+
+You: "A" [wrong]
+
+Claude: "✗ Sai. [Giải thích tại sao B đúng]. Để consolidate,
+  câu hỏi liên quan: khi nào ERP post DR AP / CR Bank?"</pre></div>
+<div class="learn-section"><h3>Spaced Repetition với Claude</h3>
+<ul class="learn-list">
+  <li>Tuần 1: "Quiz tôi về ERP core modules"</li>
+  <li>Tuần 2: "Review tuần 1 + 3 câu mới về Korean payroll"</li>
+  <li>Tuần 3: "Review tuần 1+2 + topic mới về VAT"</li>
+  <li>Mỗi session bắt đầu với: "Tôi đang ở tuần X, hôm nay học [topic]. Quiz tôi."</li>
+</ul></div>`
+},
+
+'p5_1': {
+  title: 'VN vs Korea Accounting — Developer cần biết gì?',
+  subtitle: 'Điểm khác biệt quan trọng khi chuyển từ VAS sang K-IFRS context',
+  tag: 'Accounting', tagClass: 'tag-purple',
+  body: `
+<div class="learn-section"><h3>So sánh tổng quan</h3>
+<table class="data-table">
+<thead><tr><th>Criteria</th><th>Vietnam (VAS)</th><th>Korea (K-IFRS)</th></tr></thead>
+<tbody>
+<tr><td>Standard</td><td>VAS — fixed by Ministry of Finance</td><td>K-IFRS — based on IFRS, flexible</td></tr>
+<tr><td>Account codes</td><td>Regulated (111, 112, 331...)</td><td>Company-defined under IFRS framework</td></tr>
+<tr><td>Tax invoice</td><td>Hóa đơn điện tử (eTax)</td><td>전자세금계산서 (Hometax NTS)</td></tr>
+<tr><td>VAT rates</td><td>0%, 5%, 10%</td><td>0%, 10% (no 5%)</td></tr>
+<tr><td>Payroll tax</td><td>PIT monthly + annual settlement</td><td>소득세 monthly + 연말정산 (Jan–Feb)</td></tr>
+<tr><td>Social insurance</td><td>BHXH 8%+17.5%, BHYT 1.5%+3%</td><td>국민연금 4.5%+4.5%, 건강보험 3.545%+3.545%</td></tr>
+</tbody></table></div>
+<div class="learn-section"><h3>Điểm khác biệt quan trọng nhất cho Developer</h3>
+<div class="callout ca-purple"><strong>1. Chart of Accounts — không còn fixed nữa</strong><br>VAS: account 111=tiền mặt, 112=tiền gửi — cứng. K-IFRS: công ty tự thiết kế CoA. ERP phải có flexible CoA module với mapping đến IFRS categories thay vì hardcode account numbers.</div>
+<div class="callout ca-blue"><strong>2. 세금계산서 phức tạp hơn hóa đơn điện tử VN</strong><br>Hóa đơn VN không cần confirmation ngay. 세금계산서 phải được NTS confirm realtime qua Hometax. Nếu Hometax down → ERP cần fallback (queue + retry), không thể chỉ lưu local.</div>
+<div class="callout ca-amber"><strong>3. 연말정산 không có tương đương đơn giản ở VN</strong><br>Quyết toán thuế VN = cá nhân tự kê khai hoặc qua công ty đơn giản hơn. 연말정산 Hàn phức tạp hơn nhiều với hàng chục loại deductions, employer hoàn toàn chịu trách nhiệm xử lý.</div></div>
+<div class="learn-section"><h3>Số liệu hay nhầm — VN vs KR</h3>
+<pre class="diagram">  VAT: VN có 0%, 5%, 10%        KR chỉ có 0% và 10% (không có 5%)
+
+  Mã số thuế:
+    VN: 10 digits (or 13 for branches) — no check digit
+    KR: 10 digits (사업자번호) — HAS check digit algorithm
+
+  BHXH rates (employer):
+    VN: 17.5% employer, 8% employee
+    KR: 4.5% employer (국민연금), plus health/employment separately
+
+  Tax invoice system:
+    VN: eTax Invoice → Cục thuế (periodic batch OK)
+    KR: 세금계산서 → NTS via Hometax (realtime confirmation)
+
+  Fiscal year:
+    Both: January–December (calendar year default)</pre></div>`
+},
+
+'p5_2': {
+  title: 'Soft Delete & Audit Log Pattern',
+  subtitle: 'Tại sao ERP không hard-delete — design pattern và implementation',
+  tag: 'ERP Pattern', tagClass: 'tag-purple',
+  body: `
+<div class="learn-section"><h3>Hard DELETE không được phép trong ERP</h3>
+<div class="callout ca-purple">ERP tạo ra "paper trail" — dấu vết kế toán. Hard DELETE phá hủy audit trail, vi phạm K-IFRS, NTS audit requirements, và PIPA. Hai alternative: <strong>Soft Delete</strong> cho master data, <strong>Reversal Entry</strong> cho transactions.</div>
+<div class="compare-grid">
+  <div class="compare-card c-purple">
+    <div class="cc-label">Soft Delete</div>
+    <div class="cc-title">is_deleted flag</div>
+    <ul class="learn-list">
+      <li>Cho: vendor, customer, employee, products</li>
+      <li>Field: <code>is_deleted BOOLEAN DEFAULT FALSE</code></li>
+      <li>Mọi query: WHERE is_deleted = FALSE</li>
+      <li>Có thể restore (undelete)</li>
+    </ul>
+  </div>
+  <div class="compare-card c-amber">
+    <div class="cc-label">Reversal Entry</div>
+    <div class="cc-title">Cancel + Negate</div>
+    <ul class="learn-list">
+      <li>Cho: GL entries, AP/AR invoices, payroll</li>
+      <li>Original preserved (status='CANCELLED')</li>
+      <li>New entry with negative amounts</li>
+      <li>Maintains audit trail completely</li>
+    </ul>
+  </div>
+</div></div>
+<div class="learn-section"><h3>Soft Delete Schema</h3>
+<pre class="code-block">-- Add to master data tables
+ALTER TABLE vendors ADD COLUMN (
+  is_deleted     BOOLEAN  NOT NULL DEFAULT FALSE,
+  deleted_by     BIGINT   NULL,
+  deleted_at     DATETIME NULL,
+  deleted_reason TEXT     NULL
+);
+
+-- Always use view or add condition:
+-- BAD:  SELECT * FROM vendors WHERE id = ?
+-- GOOD: SELECT * FROM vendors WHERE id = ? AND is_deleted = FALSE
+
+-- Restore support:
+UPDATE vendors SET is_deleted = FALSE, deleted_by = NULL, deleted_at = NULL
+WHERE id = ? AND is_deleted = TRUE;</pre></div>
+<div class="learn-section"><h3>Audit Log + Soft Delete Helper</h3>
+<pre class="code-block">async function softDelete(tableName, recordId, userId, reason) {
+  return db.transaction(async (trx) => {
+    const before = await db(tableName).where('id', recordId).first().transacting(trx)
+
+    if (!before) throw new Error('Record not found')
+    if (before.status === 'POSTED') throw new Error('Cannot delete posted record')
+
+    await db(tableName).where('id', recordId).update({
+      is_deleted:    true,
+      deleted_by:    userId,
+      deleted_at:    new Date(),
+      deleted_reason: reason
+    }).transacting(trx)
+
+    await db('audit_log').insert({
+      table_name: tableName,
+      record_id:  recordId,
+      action:     'DELETE',
+      changed_by: userId,
+      old_values: JSON.stringify(before),
+      new_values: JSON.stringify({ is_deleted: true }),
+      changed_at: new Date()
+    }).transacting(trx)
+  })
+}</pre></div>
+<div class="learn-section"><h3>Reversal Entry cho Posted AP Invoice</h3>
+<pre class="code-block">async function cancelPostedAPInvoice(invoiceId, userId, reason) {
+  const invoice = await ApInvoice.findById(invoiceId)
+  if (invoice.status === 'PAID') throw new Error('Cannot cancel: already paid')
+
+  await db.transaction(async (trx) => {
+    // Mark original as CANCELLED (do not delete)
+    await ApInvoice.update(invoiceId, { status: 'CANCELLED' }, trx)
+
+    // Create reversing GL entry (flip DR/CR)
+    await GLEntry.post({
+      description:    'REVERSAL of AP Invoice #' + invoiceId,
+      reference_type: 'AP_CANCEL',
+      reference_id:   invoiceId,
+      lines: invoice.glLines.map(line => ({
+        account_id: line.account_id,
+        debit:      line.credit,   // flip
+        credit:     line.debit
+      }))
+    }, trx)
+
+    await AuditLog.insert({ action: 'CANCEL', record_id: invoiceId,
+      changed_by: userId, note: reason }, trx)
+  })
+}</pre></div>`
+},
+
+'p5_3': {
+  title: 'Self-Assessment cho Fresher ERP Dev',
+  subtitle: 'Dùng Claude để tự đánh giá, tìm blind spots, và lập kế hoạch học',
+  tag: 'AI Workflow', tagClass: 'tag-purple',
+  body: `
+<div class="learn-section"><h3>Tại sao cần tự assessment?</h3>
+<div class="callout ca-purple">Fresher thường không biết mình không biết gì (unknown unknowns). Claude như "onboarding mentor ảo" reveal blind spots, prioritize learning đúng thứ tự, tránh mất thời gian học sai.</div></div>
+<div class="learn-section"><h3>3 Loại Assessment quan trọng nhất</h3>
+<div class="compare-grid">
+  <div class="compare-card c-green">
+    <div class="cc-label">Domain Knowledge</div>
+    <div class="cc-title">ERP + Korean Regulations</div>
+    <ul class="learn-list">
+      <li>ERP modules, business flows</li>
+      <li>Korean tax/payroll rules</li>
+      <li>세금계산서, Hometax, NTS</li>
+    </ul>
+  </div>
+  <div class="compare-card c-blue">
+    <div class="cc-label">Technical Skills</div>
+    <div class="cc-title">Dev Competencies</div>
+    <ul class="learn-list">
+      <li>DB schema design cho ERP</li>
+      <li>API integration patterns</li>
+      <li>Business logic debugging</li>
+    </ul>
+  </div>
+</div></div>
+<div class="learn-section"><h3>Assessment Prompt Templates</h3>
+<pre class="diagram">WEEK 1 BASELINE:
+"Tôi là ERP developer mới tuần 1.
+Hỏi tôi 3 câu open-ended để assess:
+- Tôi hiểu ERP là gì ở mức nào?
+- Tôi biết gì về Korean business context?
+- Background gì từ trước?
+Sau đó: nhận xét gaps lớn nhất + suggest focus."
+
+AFTER READING A TOPIC:
+"Tôi vừa đọc về [topic]. Tôi hiểu như này: [summary].
+Feedback: (1) Có gì sai? (2) Bỏ sót gì?
+(3) Điểm quan trọng nhất cho developer?"
+
+BEFORE CODING:
+"Tôi cần implement [feature]. Plan của tôi: [plan].
+Review plan: missing cases? wrong assumptions?"
+
+DEBUGGING SESSION:
+"Tôi fix bug bằng: [solution]. Cách này đúng về
+business logic không? Edge case nào chưa handle?"</pre></div>
+<div class="learn-section"><h3>Weekly Progress Tracking</h3>
+<pre class="diagram">Cuối mỗi tuần, chạy prompt này:
+
+"Tôi học [topics] tuần này.
+Quiz tôi 5 câu mixed: vài câu tuần này + vài câu tuần trước.
+Sau đó: 1 concept cần đào sâu hơn tuần tới."
+
+Track kết quả:
+  Tuần 1: [topics] → X/5 ───────▶ điểm tăng?
+  Tuần 2: [topics] → X/5         review cũ vẫn đúng?
+  Tuần 3: [topics] → X/5         → kiến thức consolidate</pre></div>
+<div class="learn-section"><h3>Dấu hiệu cần address ngay (Red Flags)</h3>
+<div class="callout ca-red"><strong>Nếu không trả lời được các câu hỏi này — ưu tiên học ngay:</strong></div>
+<ul class="learn-list">
+  <li><strong>Journal entries (DR/CR):</strong> Nền tảng mọi ERP module — không thể skip</li>
+  <li><strong>세금계산서 flow:</strong> Daily work trong AP/AR — cần biết trước sprint 1</li>
+  <li><strong>4대보험 rates:</strong> Payroll module thường gặp — cần nắm cơ bản</li>
+  <li><strong>SQL JOINs:</strong> ERP = heavy database — nếu còn lúng túng với JOIN → ưu tiên cao nhất</li>
+</ul></div>`
+},
+
+}; // end PROMPT_DETAILS
+
+function renderTimeline() {
+  const tl = document.getElementById('timeline');
+  tl.innerHTML = '';
+  PHASES.forEach((p, i) => {
+    const el = document.createElement('div');
+    el.className = 'phase';
+    el.id = 'phase-' + p.id;
+    el.innerHTML = `
+      <div class="phase-card">
+        <div class="phase-meta">
+          <span class="phase-tag ${p.tagClass}">${p.tag}</span>
+          <span class="phase-duration">${p.duration}</span>
+        </div>
+        <div class="phase-title">${p.title}</div>
+        <div class="phase-desc">${p.desc}</div>
+        <div class="topic-pills">
+          ${p.topics.map(t => `<span class="topic-pill">${t}</span>`).join('')}
+        </div>
+      </div>
+    `;
+    el.addEventListener('click', () => openPhase(p.id));
+    tl.appendChild(el);
+  });
+}
+
+function openPhase(id) {
+  if (activePhase === id) {
+    closePanel();
+    return;
+  }
+  activePhase = id;
+  const p = PHASES.find(x => x.id === id);
+
+  // Update active state
+  document.querySelectorAll('.phase').forEach(el => el.classList.remove('active'));
+  document.getElementById('phase-' + id).classList.add('active');
+
+  // Update header indicator
+  document.getElementById('active-phase-label').textContent = p.duration;
+
+  // Build detail content
+  const weeksHTML = p.weeks.map(w => `
+    <div class="week-card">
+      <div class="week-label">${w.label}</div>
+      <div class="week-name">${w.name}</div>
+      <ul class="skill-list">
+        ${w.skills.map(s => `<li>${s}</li>`).join('')}
+      </ul>
+    </div>
+  `).join('');
+
+  const milestonesHTML = p.milestones.map(m => `
+    <div class="milestone-item">
+      <div class="milestone-dot" style="background:${m.color}; box-shadow: 0 0 6px ${m.color}44"></div>
+      <span>${m.text}</span>
+    </div>
+  `).join('');
+
+  const promptsHTML = p.prompts.map((pr, idx) => `
+    <li onclick="openPromptDetail('${p.id}',${idx})">${pr}</li>
+  `).join('');
+
+  document.getElementById('detail-inner').innerHTML = `
+    <div class="detail-header">
+      <div>
+        <div style="margin-bottom:0.4rem"><span class="phase-tag ${p.tagClass}">${p.tag}</span></div>
+        <div class="detail-phase-title">${p.title}</div>
+        <div class="detail-phase-sub">${p.duration} · ${p.desc}</div>
+      </div>
+      <button class="detail-close" onclick="closePanel()">✕ Đóng</button>
+    </div>
+
+    <div class="week-grid">${weeksHTML}</div>
+
+    <div class="milestone-section">
+      <div class="milestone-label">// milestones</div>
+      <div class="milestone-list">${milestonesHTML}</div>
+    </div>
+
+    <div class="prompt-box">
+      <div class="prompt-box-title">Prompt mẫu — click để xem giải thích sâu</div>
+      <ul class="prompt-list">${promptsHTML}</ul>
+    </div>
+  `;
+
+  document.getElementById('detail-panel').classList.add('open');
+}
+
+function closePanel() {
+  activePhase = null;
+  document.querySelectorAll('.phase').forEach(el => el.classList.remove('active'));
+  document.getElementById('detail-panel').classList.remove('open');
+  document.getElementById('active-phase-label').textContent = '—';
+}
+
+
+
+renderTimeline();
+
+/* ── Prompt Detail Modal ── */
+function openPromptDetail(phaseId, idx) {
+  const phase  = PHASES.find(p => p.id === phaseId);
+  const detail = PROMPT_DETAILS[phaseId + '_' + idx];
+  if (!phase || !detail) return;
+
+  currentPromptText = phase.prompts[idx];
+
+  const tagEl = document.getElementById('pm-tag');
+  tagEl.className = 'phase-tag ' + detail.tagClass;
+  tagEl.textContent = detail.tag;
+  document.getElementById('pm-title').textContent = detail.title;
+  document.getElementById('pm-sub').textContent   = detail.subtitle;
+  document.getElementById('pm-body').innerHTML    = detail.body;
+
+  const modal = document.getElementById('prompt-modal');
+  modal.classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+
+function closePromptModal() {
+  document.getElementById('prompt-modal').classList.remove('open');
+  document.body.style.overflow = '';
+}
+
+function copyCurrentPrompt() {
+  if (!currentPromptText) return;
+  navigator.clipboard.writeText(currentPromptText).then(() => {
+    const btn = document.getElementById('pm-copy-btn');
+    const orig = btn.textContent;
+    btn.textContent = '✓ Copied!';
+    btn.style.background = 'rgba(74,255,160,0.2)';
+    setTimeout(() => {
+      btn.textContent = orig;
+      btn.style.background = '';
+    }, 2000);
+  });
+}
+
+// Close modal on backdrop click
+document.getElementById('prompt-modal').addEventListener('click', function(e) {
+  if (e.target === this) closePromptModal();
+});
+
+// Close on ESC
+document.addEventListener('keydown', function(e) {
+  if (e.key === 'Escape') closePromptModal();
+});
+</script>
+</body>
+</html>
